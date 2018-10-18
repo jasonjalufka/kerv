@@ -1,6 +1,8 @@
 import * as actionTypes from '../actions';
 
-const initialState = {
+//This reducer is to keep track of the total sales per drink
+
+const initialState = {    
     espresso: 0,
     macchiato: 0,
     cortado: 0,
@@ -10,30 +12,14 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.ESPRESSO:
+        case actionTypes.ADD_SALE:
             return {
                 ...state,
-                espresso: state.espresso + 1
-            };
-        case actionTypes.MACCHIATO:
-            return {
-                ...state,
-                macchiato: state.macchiato + 1
-            };
-        case actionTypes.CORTADO:
-            return {
-                ...state,
-                cortado: state.cortado + 1
-            };
-        case actionTypes.CAPPUCCINO:
-            return {
-                ...state,
-                cappuccino: state.cappuccino + 1
-            };
-        case actionTypes.LATTE:
-            return {
-                ...state,
-                latte: state.latte + 1
+                espresso: state.espresso + action.order.espresso,
+                macchiato: state.macchiato + action.order.macchiato,
+                cortado: state.cortado + action.order.cortado,
+                cappuccino: state.cappuccino + action.order.cappuccino,
+                latte: state.latte + action.order.latte
             };
         default:
             return state;

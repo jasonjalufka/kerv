@@ -6,10 +6,13 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-    return {
-        ...state,
-        milk: state.milk - drinks[action.type]
-    }
+    // switch(action.type)
+    // case 
+    // return {
+    //     ...state,
+    //     //TODO CHANGE 
+    //     milk: state.milk 
+    // }
 }
 
 export default reducer;
