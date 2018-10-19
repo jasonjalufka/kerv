@@ -2,7 +2,7 @@ import * as actionTypes from '../actions';
 
 //This reducer is to keep track of the total sales per drink
 
-const initialState = {    
+const initialState = {
     espresso: 0,
     macchiato: 0,
     cortado: 0,

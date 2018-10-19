@@ -15,18 +15,17 @@ class Kerv extends Component {
             </div>
         );
     }
-};
+}
 
 const mapStateToProps = state => {
-    return {
-
-    }
-}
+    return {};
+};
 
 const mapDispatchToProps = dispatch => {
-    return {
+    return {};
+};
 
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Kerv);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Kerv);
