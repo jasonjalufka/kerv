@@ -7,26 +7,25 @@ import Menu from '../../containers/Menu/Menu';
 import OrderControls from '../../components/OrderControls';
 
 class Kerv extends Component {
-    render() {
-        return (
-            <div>
-                <Menu />
-                <Inventory />
-            </div>
-        );
-    }
-};
+	render() {
+		return (
+			<div>
+				<Menu />
+				<Inventory />
+			</div>
+		);
+	}
+}
 
 const mapStateToProps = state => {
-    return {
-
-    }
-}
+	return {};
+};
 
 const mapDispatchToProps = dispatch => {
-    return {
+	return {};
+};
 
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Kerv);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Kerv);
