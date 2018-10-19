@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as actionTypes from '../../store/actions';
 import MenuItem from '../../components/MenuItem';
 import drinks from '../../data/drinks';
+import Inventory from '../../components/Inventory';
 
 class Menu extends Component {
     constructor(props) {
@@ -27,21 +28,27 @@ class Menu extends Component {
 
      }
 
+     //Resets order state to 0 to be used for the next order
      handlePlaceOrder(order) {
         this.props.onSubmitOrder(order);
 
-        for(let n of drinks) {
-            order[n.name] = 0;
-        }
+        Object.keys(drinks).map(drink =>{
+            order[drink] = 0;
+            return null;
+        });
+      
         this.setState(order);
      }
 
+     //Initialized state of order upon mounting component
      componentDidMount() {
         let order = {};
         
-        for(let n of drinks) {
-            order[n.name] = 0;
-        }
+        Object.keys(drinks).map(drink =>{
+            order[drink] = 0;
+            return null;
+        });
+
         this.setState(order);
      }
 
@@ -50,12 +57,14 @@ class Menu extends Component {
             <div className="menu">
                 <h1>Menu</h1>
                 <ul>
-                    {drinks.map(drink => (
-                        <MenuItem name={drink.name} total={this.state[drink.name]} handleIncrease={this.handleIncreaseDrink} 
+                    {Object.keys(drinks).map(drink => (
+                        <MenuItem name={drink} total={this.state[drink]} handleIncrease={this.handleIncreaseDrink} 
                         handleDecrease={this.handleDecreaseDrink} />
                     ))}
                 </ul>
-                <button onClick={() => this.props.onSubmitOrder(this.state)}>Order</button>
+                <button onClick={() => this.handlePlaceOrder(this.state)}>Order</button>
+
+                <Inventory milk={this.props.milk}/>
             </div>
             
         );
@@ -64,7 +73,8 @@ class Menu extends Component {
 
 const mapStateToProps = state => {
     return {
-
+        sales: state.sales,
+        milk: state.inventory.milk
     }
 }
 
