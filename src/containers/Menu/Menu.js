@@ -1,19 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actionTypes from "../../store/actions";
-import MenuItem from "../../components/MenuItem";
+import DrinkMenu from "../../components/DrinkMenu";
 import drinks from "../../data/drinks";
 import Inventory from "../../components/Inventory";
 import Sales from "../../components/Sales";
+import Card from '@material-ui/core/Card';
+import List from '@material-ui/core/List';
 
 class Menu extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selectedIndex: null
+    };
 
     this.handleIncreaseDrink = this.handleIncreaseDrink.bind(this);
     this.handleDecreaseDrink = this.handleDecreaseDrink.bind(this);
     this.handlePlaceOrder = this.handlePlaceOrder.bind(this);
+    this.handleSelectDrink = this.handleSelectDrink.bind(this);
   }
 
   handleIncreaseDrink(drink) {
@@ -24,6 +29,11 @@ class Menu extends Component {
   handleDecreaseDrink(drink) {
     this.setState(state => state[drink]--);
     console.log(this.state[drink]);
+  }
+
+  handleSelectDrink(index) {
+    console.log(index);
+    this.setState({ selectedIndex: index });
   }
 
   //Resets order state to 0 to be used for the next order
@@ -54,16 +64,21 @@ class Menu extends Component {
     return (
       <div className="menu">
         <h1>Menu</h1>
-        <ul>
-          {Object.keys(drinks).map(drink => (
-            <MenuItem
-              name={drink}
-              total={this.state[drink]}
-              handleIncrease={this.handleIncreaseDrink}
-              handleDecrease={this.handleDecreaseDrink}
-            />
-          ))}
-        </ul>
+        <Card raised>
+          <List>
+            {Object.keys(drinks).map((drink, index) => (
+              <DrinkMenu key={index}
+                name={drink}
+                total={this.state[drink]}
+                handleIncrease={this.handleIncreaseDrink}
+                handleDecrease={this.handleDecreaseDrink}
+                handleSelect={this.handleSelectDrink}
+                selectedIndex={this.state.selectedIndex}
+                index={index}
+              />
+            ))}
+          </List>
+        </Card>
         <button onClick={() => this.handlePlaceOrder(this.state)}>Order</button>
 
         <Inventory milk={this.props.milk} />
