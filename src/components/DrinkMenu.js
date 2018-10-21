@@ -11,12 +11,9 @@ class DrinkMenu extends Component {
 
 	render() {
 		return (
-			<ListItem button onClick={() => this.props.handleSelect(this.props.index)} selected={this.props.index === this.props.selectedIndex}>
+			<ListItem button onClick={(e) => this.props.handleSelect(e, this.props.index)} selected={this.props.index === this.props.selectedIndex}>
 				<ListItemText primary={this.props.name} />
-				{/* <div>
-					<button onClick={() => this.props.handleDecrease(this.props.name)}>-</button>
-					<button onClick={() => this.props.handleIncrease(this.props.name)}>+</button>
-				</div> */}
+
 			</ ListItem>
 		);
 	}

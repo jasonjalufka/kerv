@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux';
 import salesReducer from './store/reducers/salesReducer';
 import inventoryReducer from './store/reducers/inventoryReducer';
@@ -10,7 +11,8 @@ import App from './App';
 
 const rootReducer = combineReducers({
 	sales: salesReducer,
-	inventory: inventoryReducer
+	inventory: inventoryReducer,
+	form: formReducer
 });
 
 const store = createStore(rootReducer);

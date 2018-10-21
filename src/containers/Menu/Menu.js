@@ -2,38 +2,32 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actionTypes from "../../store/actions";
 import DrinkMenu from "../../components/DrinkMenu";
+import BeanMenu from "../../components/BeanMenu";
 import drinks from "../../data/drinks";
+import inventory from "../../data/inventory";
 import Inventory from "../../components/Inventory";
 import Sales from "../../components/Sales";
 import Card from '@material-ui/core/Card';
 import List from '@material-ui/core/List';
+import MenuForm from '../../components/MenuForm';
 
 class Menu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedIndex: null
+      selectedDrink: null,
+      selectedBean: null,
+      selectedMilk: null
     };
 
-    this.handleIncreaseDrink = this.handleIncreaseDrink.bind(this);
-    this.handleDecreaseDrink = this.handleDecreaseDrink.bind(this);
     this.handlePlaceOrder = this.handlePlaceOrder.bind(this);
     this.handleSelectDrink = this.handleSelectDrink.bind(this);
   }
 
-  handleIncreaseDrink(drink) {
-    this.setState(state => state[drink]++);
-    console.log(this.state[drink]);
-  }
-
-  handleDecreaseDrink(drink) {
-    this.setState(state => state[drink]--);
-    console.log(this.state[drink]);
-  }
-
-  handleSelectDrink(index) {
+  handleSelectDrink(e, index) {
     console.log(index);
-    this.setState({ selectedIndex: index });
+    console.log(e.target.value);
+    this.setState({ selectedDrink: index });
   }
 
   //Resets order state to 0 to be used for the next order
@@ -46,6 +40,10 @@ class Menu extends Component {
     });
 
     this.setState(order);
+  }
+
+  handleSubmit = values => {
+    console.log(values)
   }
 
   //Initialized state of order upon mounting component
@@ -64,25 +62,39 @@ class Menu extends Component {
     return (
       <div className="menu">
         <h1>Menu</h1>
-        <Card raised>
+        {/* <Card raised>
           <List>
             {Object.keys(drinks).map((drink, index) => (
               <DrinkMenu key={index}
                 name={drink}
-                total={this.state[drink]}
-                handleIncrease={this.handleIncreaseDrink}
-                handleDecrease={this.handleDecreaseDrink}
                 handleSelect={this.handleSelectDrink}
-                selectedIndex={this.state.selectedIndex}
+                selectedDrink={this.state.selectedDrink}
+                index={index}
+              />
+            ))}
+          </List>
+        </Card> */}
+
+        {/* <Card raised>
+          <List>
+            <h2>Beans</h2>
+            {Object.keys(inventory.beans).map((bean, index) => (
+              <BeanMenu key={index}
+                name={bean}
                 index={index}
               />
             ))}
           </List>
         </Card>
-        <button onClick={() => this.handlePlaceOrder(this.state)}>Order</button>
+        <button onClick={() => this.handlePlaceOrder(this.state)}>Order</button> */}
 
-        <Inventory milk={this.props.milk} />
-        <Sales sales={this.props.sales} />
+
+
+
+
+        <Card>
+          <MenuForm onSubmit={this.handleSubmit} />
+        </Card>
       </div>
     );
   }
