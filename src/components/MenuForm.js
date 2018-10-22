@@ -11,10 +11,9 @@ import Button from '@material-ui/core/Button';
 
 
 let MenuForm = (props) => {
-    const { classes, hasDrinkOption, hasBeanOption, hasMilkOption, handleSubmit } = props;
-    //props.initialize({drinkOption: "espresso"});
+    const { hasDrinkOption, hasBeanOption, hasMilkOption, handleSubmit } = props;
+
     const submitForm = (formValues) => {
-        // console.log('submitting Form: ', formValues);
         props.onSubmit(formValues);
         props.reset();
     }
@@ -74,12 +73,9 @@ let MenuForm = (props) => {
             </Grid>
             </div>
             <Button type="submit" variant="contained" color="primary" disabled={!(hasDrinkOption && hasBeanOption && hasMilkOption)}>Add to Order</Button>
-            {/* <button type="submit" label="submit" disabled={!(hasDrinkOption && hasBeanOption && hasMilkOption)}>Add to Order</button> */}
         </form>
     );
 };
-
-
 
 MenuForm = reduxForm({
     form: 'menu'

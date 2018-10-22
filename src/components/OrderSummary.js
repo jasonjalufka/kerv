@@ -4,6 +4,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Card from '@material-ui/core/Card';
 import drinks from "../data/drinks";
 import milkCost from "../data/milkCost";
+import Button from '@material-ui/core/Button';
 
 const OrderSummary = (props) =>  {
 const {order} = props;
@@ -20,7 +21,7 @@ return(
             Object.keys(order).map((orderKey, index) => (
                 <div key={index}>
                 {
-                    index!=orderCountIndex&&<ListItem>
+                    index!==orderCountIndex&&<ListItem>
                         <ListItemText primary={order[orderKey].drinkOption}/>
                         <ListItemText primary={order[orderKey].beanOption}/>
                         <ListItemText primary={order[orderKey].milkOption}/>
@@ -31,6 +32,8 @@ return(
                 </div>
             ))
         }
+        <Button variant="contained" color="primary" 
+                onClick={ () => props.placeOrder(order) }>Place Order</Button>
     </Card>
     );
 }   

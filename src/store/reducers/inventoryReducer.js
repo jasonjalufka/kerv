@@ -9,11 +9,15 @@ import inventory from '../../data/inventory';
 // }
 
 let initial = {};
+
 Object.keys(inventory).map((type, index) => {
   Object.keys(inventory[type]).map((item, index2) => {
     initial[item] = inventory[type][item];
+    return null;
   })
+  return null;
 });
+
 const initialState = initial;
 
 const reducer = (state = initialState, action) => {
