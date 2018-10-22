@@ -7,6 +7,7 @@ import Inventory from "../../components/Inventory";
 import Sales from "../../components/Sales";
 import MenuForm from '../../components/MenuForm';
 import OrderSummary from '../../components/OrderSummary';
+import Card from '@material-ui/core/Card';
 
 class Menu extends Component {
   constructor(props) {
@@ -51,14 +52,19 @@ class Menu extends Component {
   render() {
     return (
       <div className="menu">
-        <h1>Menu</h1>
-        <MenuForm onSubmit={this.handleAddToOrder} />
-        <h1>ORDER SUMMARY</h1>
-         {
-            console.log('this is after order summary', this.props.order[0])
-            
-          }
-        {this.props.order[0]&&<OrderSummary order={this.props.order}/>}
+        <Card>
+          <h2>Menu</h2>
+            <MenuForm onSubmit={this.handleAddToOrder} />
+        </Card>
+
+        <Card>
+          <h2>ORDER SUMMARY</h2>
+          {
+              console.log('this is after order summary', this.props.order[0])
+              
+            }
+          {this.props.order[0]&&<OrderSummary order={this.props.order}/>}
+        </Card>
       </div>
     );
   }
