@@ -6,6 +6,7 @@ import inventory from "../../data/inventory";
 import Inventory from "../../components/Inventory";
 import Sales from "../../components/Sales";
 import MenuForm from '../../components/MenuForm';
+import OrderSummary from '../../components/OrderSummary';
 
 class Menu extends Component {
   constructor(props) {
@@ -52,6 +53,12 @@ class Menu extends Component {
       <div className="menu">
         <h1>Menu</h1>
         <MenuForm onSubmit={this.handleAddToOrder} />
+        <h1>ORDER SUMMARY</h1>
+         {
+            console.log('this is after order summary', this.props.order[0])
+            
+          }
+        {this.props.order[0]&&<OrderSummary order={this.props.order}/>}
       </div>
     );
   }
@@ -60,7 +67,8 @@ class Menu extends Component {
 const mapStateToProps = state => {
   return {
     sales: state.sales,
-    milk: state.inventory.milk
+    milk: state.inventory.milk,
+    order: state.order
   };
 };
 
