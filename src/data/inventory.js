@@ -18,19 +18,11 @@ const inventory = {
         nicaraguan: 1000
     },
     milk: {
-        oat: {
-            oz: 500,
-            price: 1
-        },
-        whole: {
-            oz: 5000,
-            price: 0
-        },
-        almond: {
-            oz: 1000,
-            price: .50
-        }
+        oat: 500,
+        whole: 5000,
+        almond: 1000,
     }
 }
+
 
 export default inventory;

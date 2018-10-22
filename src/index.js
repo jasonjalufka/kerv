@@ -5,6 +5,7 @@ import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux';
 import salesReducer from './store/reducers/salesReducer';
 import inventoryReducer from './store/reducers/inventoryReducer';
+import orderReducer from './store/reducers/orderReducer';
 import './index.css';
 import App from './App';
 // import * as serviceWorker from './serviceWorker';
@@ -12,6 +13,7 @@ import App from './App';
 const rootReducer = combineReducers({
 	sales: salesReducer,
 	inventory: inventoryReducer,
+	order: orderReducer,
 	form: formReducer
 });
 
