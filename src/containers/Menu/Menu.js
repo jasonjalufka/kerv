@@ -7,7 +7,6 @@ import drinks from "../../data/drinks";
 import inventory from "../../data/inventory";
 import Inventory from "../../components/Inventory";
 import Sales from "../../components/Sales";
-import Card from '@material-ui/core/Card';
 import List from '@material-ui/core/List';
 import MenuForm from '../../components/MenuForm';
 
@@ -42,8 +41,9 @@ class Menu extends Component {
     this.setState(order);
   }
 
-  handleSubmit = values => {
-    console.log(values)
+  handleSubmit = order => {
+    console.log(order);
+    this.props.onSubmitOrder(order);
   }
 
   //Initialized state of order upon mounting component
@@ -62,39 +62,7 @@ class Menu extends Component {
     return (
       <div className="menu">
         <h1>Menu</h1>
-        {/* <Card raised>
-          <List>
-            {Object.keys(drinks).map((drink, index) => (
-              <DrinkMenu key={index}
-                name={drink}
-                handleSelect={this.handleSelectDrink}
-                selectedDrink={this.state.selectedDrink}
-                index={index}
-              />
-            ))}
-          </List>
-        </Card> */}
-
-        {/* <Card raised>
-          <List>
-            <h2>Beans</h2>
-            {Object.keys(inventory.beans).map((bean, index) => (
-              <BeanMenu key={index}
-                name={bean}
-                index={index}
-              />
-            ))}
-          </List>
-        </Card>
-        <button onClick={() => this.handlePlaceOrder(this.state)}>Order</button> */}
-
-
-
-
-
-        <Card>
           <MenuForm onSubmit={this.handleSubmit} />
-        </Card>
       </div>
     );
   }
