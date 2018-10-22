@@ -14,7 +14,7 @@ const reducer = (state = initialState, action) => {
             }
             return newState;
         case actionTypes.ADD_SALE:
-            return {orderCount: 0};
+            return { orderCount: 0 };
         default:
             return state;
     }

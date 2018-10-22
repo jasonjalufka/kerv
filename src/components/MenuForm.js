@@ -22,57 +22,58 @@ let MenuForm = (props) => {
     return (
         <form onSubmit={handleSubmit(submitForm)}>
             <div>
-            <Grid container spacing={24}>
-                <Grid item xs>
-                    <Card>
-                        <h3>Drink</h3>
-                        {
-                            Object.keys(drinks).map((drink, index) => (
-                                <ListItem button selected={hasDrinkOption === drink} key={index} onClick={() => {
-                                    props.change("drinkOption", drink);
-                                }}>
-                                    <Field name="drinkOption" component="input" type="radio" value={drink} />
-                                    <ListItemText primary={drink} />
-                                </ ListItem>
-                            ))
-                        }
-                    </Card>
-                </Grid>
+                <Grid container spacing={24}>
+                    <Grid item xs>
+                        <Card>
+                            <h3>Drink</h3>
+                            {
+                                Object.keys(drinks).map((drink, index) => (
+                                    <ListItem button selected={hasDrinkOption === drink} key={index} onClick={() => {
+                                        props.change("drinkOption", drink);
+                                        props.change("milkOption", null);
+                                    }}>
+                                        <Field name="drinkOption" component="input" type="radio" value={drink} />
+                                        <ListItemText primary={drink} />
+                                    </ ListItem>
+                                ))
+                            }
+                        </Card>
+                    </Grid>
 
-                <Grid item xs>
-                    {hasDrinkOption && <Card>
-                        <h3>Beans</h3>
-                        {
-                            Object.keys(inventory.beans).map((bean, index) => (
-                                <ListItem button selected={hasBeanOption === bean} key={index} onClick={() => {
-                                    props.change("beanOption", bean);
-                                }}>
-                                    <Field name="beanOption" component="input" type="radio" value={bean} />
-                                    <ListItemText primary={bean} />
-                                </ ListItem>
-                            ))
-                        }
-                    </Card>}
-                </Grid>
+                    <Grid item xs>
+                        {hasDrinkOption && <Card>
+                            <h3>Beans</h3>
+                            {
+                                Object.keys(inventory.beans).map((bean, index) => (
+                                    <ListItem button selected={hasBeanOption === bean} key={index} onClick={() => {
+                                        props.change("beanOption", bean);
+                                    }}>
+                                        <Field name="beanOption" component="input" type="radio" value={bean} />
+                                        <ListItemText primary={bean} />
+                                    </ ListItem>
+                                ))
+                            }
+                        </Card>}
+                    </Grid>
 
-                <Grid item xs>
-                    {hasDrinkOption && hasBeanOption && <Card>
-                        <h3>Milk</h3>
-                        {
-                            Object.keys(inventory.milk).map((milk, index) => (
-                                <ListItem button selected={hasMilkOption === milk} key={index} onClick={() => {
-                                    props.change("milkOption", milk);
-                                }}>
-                                    <Field name="milkOption" component="input" type="radio" value={milk} />
-                                    <ListItemText primary={milk} />
-                                </ ListItem>
-                            ))
-                        }
-                    </Card>}
+                    <Grid item xs>
+                        {(hasDrinkOption !== 'espresso') && hasBeanOption && <Card>
+                            <h3>Milk</h3>
+                            {
+                                Object.keys(inventory.milk).map((milk, index) => (
+                                    <ListItem button selected={hasMilkOption === milk} key={index} onClick={() => {
+                                        props.change("milkOption", milk);
+                                    }}>
+                                        <Field name="milkOption" component="input" type="radio" value={milk} />
+                                        <ListItemText primary={milk} />
+                                    </ ListItem>
+                                ))
+                            }
+                        </Card>}
+                    </Grid>
                 </Grid>
-            </Grid>
             </div>
-            <Button type="submit" variant="contained" color="primary" disabled={!(hasDrinkOption && hasBeanOption && hasMilkOption)}>Add to Order</Button>
+            <Button type="submit" variant="contained" color="primary" disabled={!(((hasDrinkOption !== 'espresso') && hasBeanOption && hasMilkOption) || (hasDrinkOption === 'espresso' && hasBeanOption))}>Add to Order</Button>
         </form>
     );
 };
