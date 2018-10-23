@@ -12,19 +12,6 @@ class Menu extends Component {
   //Resets order state to 0 to be used for the next order
   handlePlaceOrder = order => {
     console.log("[handlePlaceOrder]");
-    console.log(order);
-    let orderTotal = 0;
-    Object.keys(order).map((key, index) => {
-      if (key !== 'orderCount') {
-        return orderTotal += order[key].total;
-      }
-      else {
-        return orderTotal += 0;
-      }
-    });
-
-    order.total = orderTotal;
-    console.log(orderTotal);
     this.props.onSubmitOrder(order);
   }
 
