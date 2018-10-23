@@ -30,7 +30,6 @@ const OrderSummary = (props) => {
                                 <ListItemText primary={order[orderKey].milkOption} />
                                 <ListItemText primary={'$' + getTotal(orderKey)} />
                             </ListItem>
-
                         }
                     </div>
                 ))

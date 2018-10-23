@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import drinks from "../data/drinks";
+import milkCost from "../data/milkCost";
 import inventory from "../data/inventory";
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
@@ -33,7 +34,7 @@ let MenuForm = (props) => {
                                         props.change("milkOption", null);
                                     }}>
                                         <Field name="drinkOption" component="input" type="radio" value={drink} />
-                                        <ListItemText primary={drink} />
+                                        <ListItemText primary={drink} secondary={'$' + drinks[drink].price} />
                                     </ ListItem>
                                 ))
                             }
@@ -65,7 +66,7 @@ let MenuForm = (props) => {
                                         props.change("milkOption", milk);
                                     }}>
                                         <Field name="milkOption" component="input" type="radio" value={milk} />
-                                        <ListItemText primary={milk} />
+                                        <ListItemText primary={milk} secondary={milkCost[milk] !== 0 ? '+ $' + milkCost[milk] : ''} />
                                     </ ListItem>
                                 ))
                             }
