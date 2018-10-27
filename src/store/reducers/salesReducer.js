@@ -17,6 +17,13 @@ const reducer = (state = initialState, action) => {
 			}
 			console.log("salesReducer: ", newState);
 			return newState;
+		case actionTypes.TEST:
+			let newerState = {
+				...state,
+				TEST: action.test
+			}
+			console.log("salesReducer: ", newerState);
+			return state;
 		default:
 			return state;
 	}
