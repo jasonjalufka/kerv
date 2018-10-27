@@ -64,26 +64,6 @@ let MenuConfig = props => {
                         : ''
                     }
 
-
-                    {/* Display bean options */}
-                    {props.selection === "bean" ?
-                        <Grid item xs>
-                            <form onSubmit={handleSubmit(submitForm)}>
-                                <List subheader={<ListSubheader component="div">Beans</ListSubheader>}>
-                                    {
-                                        Object.keys(inventory.beans).map((bean, index) => (
-                                            <ListItem>
-                                                <ListItemText primary={bean} />
-                                            </ ListItem>
-                                        ))
-                                    }
-                                </List>
-                                <Button type="submit" variant="contained" color="primary">Submit</Button>
-                            </form>
-                        </Grid>
-                        : ''
-                    }
-
                     {/* Display milk options */}
                     {props.selection === "milk" ?
                         <Grid item xs>
