@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import salesReducer from './store/reducers/salesReducer';
 import inventoryReducer from './store/reducers/inventoryReducer';
 import orderReducer from './store/reducers/orderReducer';
+import { composeWithDevTools } from "redux-devtools-extension";
 import './index.css';
 import App from './App';
 // import * as serviceWorker from './serviceWorker';
@@ -17,7 +18,10 @@ const rootReducer = combineReducers({
 	form: formReducer
 });
 
-const store = createStore(rootReducer);
+const store = createStore(
+	rootReducer,
+	composeWithDevTools()
+);
 
 ReactDOM.render(
 	<Provider store={store}>

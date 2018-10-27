@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import MenuConfig from './MenuConfig';
 import { connect } from "react-redux";
 
-class MenuConfigFormContainer extends Component{
+class MenuConfigFormContainer extends Component {
 
     render() {
         return <MenuConfig selection={this.props.selection} {...this.props} onSubmit={this.props.onSubmit} />
@@ -11,7 +11,7 @@ class MenuConfigFormContainer extends Component{
 
 const mapStateToProps = (state, props) => {
     return {
-        form: "menuConfig" + props.formId,
+        form: "menuConfig" + props.selection,
     };
 };
 
