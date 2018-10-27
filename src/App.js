@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Menu from './containers/Menu/Menu';
 import Sales from './containers/Sales/Sales';
+import KervConfig from './containers/Kerv/KervConfig';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 class App extends Component {
@@ -14,10 +15,12 @@ class App extends Component {
             <ul>
               <button><Link to="/">Home</Link></button>
               <button><Link to="/sales">Sales</Link></button>
+              <button><Link to="/config">Settings</Link></button>
             </ul>
             <hr />
             <Route exact path="/" component={Menu} />
             <Route path="/sales" component={Sales} />
+            <Route path="/config" component={KervConfig} />
           </div>
         </Router>
         {/* <Menu /> */}
