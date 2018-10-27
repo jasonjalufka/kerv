@@ -1,4 +1,6 @@
 import React from 'react';
+import { Field, reduxForm} from 'redux-form';
+// import { connect } from 'react-redux'
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import ListSubheader from '@material-ui/core/ListSubheader';
@@ -11,57 +13,99 @@ import drinks from '../data/drinks';
 import milkCost from "../data/milkCost";
 
 
-let MenuConfig = (props) =>{
+let MenuConfig =(props) => {
+    const {handleSubmit} = props;
+    const submitForm = (formValues) => {
+        props.onSubmit(formValues);
+        console.log("in submitForm of MenuConfig");
+        props.reset();
+    }
     return (
         <div>
             <Card>
                 <Grid container spacing={24}>
                     {/* Display the drink options */}
+                    {props.selection === "drink" ?
                     <Grid item xs>
+                    <form onSubmit={handleSubmit(submitForm)}>
                         <List subheader={<ListSubheader component="div">Drinks</ListSubheader>}>
                             {
                                 Object.keys(drinks).map((drink, index) => (
-                                    <ListItem>
-                                        <ListItemText primary={drink} secondary={'$' + drinks[drink].price} />
-                                    </ ListItem>
+                                    <Grid container space={8}>
+                                        <Grid item xs>
+                                            <ListItem>
+                                                <Field name={drink} placeholder={drink} component="input" type="text" value={drink} />
+                                                <Field label="$" name={drink + "Price"} placeholder={drinks[drink].price} component="input" type="text" value={""+drinks[drink].price} />
+
+                                                {/* <ListItemText primary={drink} /> */}
+                                            </ ListItem>
+                                        </Grid>
+                                        <Grid item xs>
+                                            <ListItem>
+                                                {/* <Field label="$" name={drink + "Price"} placeholder={drinks[drink].price} component="input" type="text" value={""+drinks[drink].price} /> */}
+                                                {/* <ListItemText primary={'$' + drinks[drink].price} /> */}
+                                            </ListItem>
+                                        </Grid>
+                                    </Grid>
                                 ))
                             }
                         </List>
+                        <Button type="submit" variant="contained" color="primary">Submit</Button>
+                    </form>
                     </Grid>
+                    : ''
+                    }
+                    
 
                     {/* Display bean options */}
+                    {props.selection === "bean" ?
                     <Grid item xs>
-                        <List subheader={<ListSubheader component="div">Beans</ListSubheader>}>
-                            {
-                                Object.keys(inventory.beans).map((bean, index) => (
-                                    <ListItem>
-                                        <ListItemText primary={bean} />
-                                    </ ListItem>
-                                ))
-                            }
-                        </List>
+                        <form onSubmit={handleSubmit(submitForm)}>
+                            <List subheader={<ListSubheader component="div">Beans</ListSubheader>}>
+                                {
+                                    Object.keys(inventory.beans).map((bean, index) => (
+                                        <ListItem>
+                                            <ListItemText primary={bean} />
+                                        </ ListItem>
+                                    ))
+                                }
+                            </List>
+                            <Button type="submit" variant="contained" color="primary">Submit</Button>
+                        </form>
                     </Grid>
+                    : ''
+                    }
 
                     {/* Display milk options */}
+                    {props.selection === "milk" ?
                     <Grid item xs>
-                        <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
-                            {
-                                Object.keys(inventory.milk).map((milk, index) => (
-                                    <ListItem>
-                                        <ListItemText primary={milk} secondary={milkCost[milk] !== 0 ? '+ $' + milkCost[milk] : ''} />
-                                    </ ListItem>
-                                ))
-                            }
-                        </List>
+                        <form onSubmit={handleSubmit(submitForm)}>
+                            <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
+                                {
+                                    Object.keys(inventory.milk).map((milk, index) => (
+                                        <ListItem>
+                                            <ListItemText primary={milk} secondary={milkCost[milk] !== 0 ? '+ $' + milkCost[milk] : ''} />
+                                        </ ListItem>
+                                    ))
+                                }
+                            </List>
+                            <Button type="submit" variant="contained" color="primary">Submit</Button>
+                        </form>
                     </Grid>
+                    : ''
+                    }
                 </Grid>
-                <Grid item xs>
+                {/* <Grid item xs>
                     <Button variant="contained" color="primary">Edit</Button>
                     <Button variant="contained" color="primary">Add</Button>
-                </Grid>
+                </Grid> */}
             </Card>
         </div>
     );
 };
+
+MenuConfig = reduxForm({
+    
+})(MenuConfig)
 
 export default MenuConfig
