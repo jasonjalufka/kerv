@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import MenuConfig from '../../components/MenuConfig';
+import MenuConfigFormContainer from '../../components/MenuConfigFormContainer';
+import InventoryConfig from '../../components/InventoryConfig';
+import * as actionTypes from "../../store/actions";
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import List from '@material-ui/core/List';
@@ -13,18 +15,26 @@ import Collapse from '@material-ui/core/Collapse';
 
 class KervConfig extends Component {
     state ={
-        open: true,
-        editSelection: null
+        open: false,
+        editSelection: null, 
+        displayInventory: false
     };
-
-    handleExpand = () => {
-        this.setState(state =>({open: !state.open}))
+    
+    handleDisplayInventory = () => {
+        this.setState(state =>({displayInventory: true, editSelection: null}));
     }
 
-    handleSelectEdit = () => {
-        this.setState(state =>({editSelection: "key" }));
-        console.log(this.state.editSelection);
+    handleExpand = () => {
+        this.setState(state =>({open: !state.open}));
+    }
 
+    handleSelectEdit(key){
+        this.setState(({editSelection: key, displayInventory: false }));
+    }
+
+    handleSubmit = formValues =>{
+        console.log("attempting submit on drink" );
+        this.props.onSubmitChange(formValues);
     }
 
     render() {
@@ -40,19 +50,19 @@ class KervConfig extends Component {
                                         {this.state.open ? <ExpandLess /> : <ExpandMore />}
                                     </ListItem>
                                     <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                                        <List component="div" disablePadding subheader={<ListSubheader component="div">Edit</ListSubheader>}>
-                                            <ListItem button onClick={this.handleSelectEdit}>
+                                        <List component="div" disablePadding subheader={<ListSubheader component="div">Choose one to view</ListSubheader>}>
+                                            <ListItem button onClick={()=>{this.handleSelectEdit("drink")}}>
                                                 <ListItemText inset primary={"Drinks"}/>
                                             </ListItem>
-                                            <ListItem button onClick={this.handleSelectEdit}>
+                                            <ListItem button onClick={()=>{this.handleSelectEdit("bean")}}>
                                                 <ListItemText inset primary={"Beans"}/>
                                             </ListItem>
-                                            <ListItem button onClick={this.handleSelectEdit}>
+                                            <ListItem button onClick={()=>{this.handleSelectEdit("milk")}}>
                                                 <ListItemText inset primary={"Milk"}/>
                                             </ListItem>
                                         </List>
                                     </Collapse>
-                                    <ListItem button>
+                                    <ListItem button onClick={this.handleDisplayInventory}>
                                         <ListItemText primary={"Inventory Options"}/>
                                     </ListItem>
                                 </List>
@@ -61,8 +71,11 @@ class KervConfig extends Component {
                         </Grid>
                         <Grid item xs>
                             <Card>
-                            {/* insert conditional rendered component of either menu or inventory */}
-                                <MenuConfig/>
+                            {/* conditional rendering of either menu or inventory config component */}
+                                {this.state.editSelection&&
+                                <MenuConfigFormContainer selection={this.state.editSelection} onSubmit={this.handleSubmit}/>
+                                }
+                                {this.state.displayInventory&&<InventoryConfig />}
                             </Card>
                         </Grid>
                     </Grid>
@@ -77,7 +90,11 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-    return {};
+    return {
+        onSubmitChange: test => {
+            dispatch({ type: actionTypes.TEST, test: test });
+          }
+    };
 };
 
 export default connect(
