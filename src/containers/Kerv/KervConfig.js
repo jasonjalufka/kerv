@@ -19,7 +19,7 @@ class KervConfig extends Component {
         editSelection: null, 
         displayInventory: false
     };
-    
+
     handleDisplayInventory = () => {
         this.setState(state =>({displayInventory: true, editSelection: null}));
     }
@@ -53,9 +53,6 @@ class KervConfig extends Component {
                                         <List component="div" disablePadding subheader={<ListSubheader component="div">Choose one to view</ListSubheader>}>
                                             <ListItem button onClick={()=>{this.handleSelectEdit("drink")}}>
                                                 <ListItemText inset primary={"Drinks"}/>
-                                            </ListItem>
-                                            <ListItem button onClick={()=>{this.handleSelectEdit("bean")}}>
-                                                <ListItemText inset primary={"Beans"}/>
                                             </ListItem>
                                             <ListItem button onClick={()=>{this.handleSelectEdit("milk")}}>
                                                 <ListItemText inset primary={"Milk"}/>
