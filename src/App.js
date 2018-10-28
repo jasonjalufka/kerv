@@ -1,30 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-import Menu from './containers/Menu/Menu';
-import Sales from './containers/Sales/Sales';
-import KervConfig from './containers/Kerv/KervConfig';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import NavBar from './components/NavBar';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
         <h1>K E R V</h1>
-        <Router>
-          <div>
-            <ul>
-              <button><Link to="/">Home</Link></button>
-              <button><Link to="/sales">Sales</Link></button>
-              <button><Link to="/config">Settings</Link></button>
-            </ul>
-            <hr />
-            <Route exact path="/" component={Menu} />
-            <Route path="/sales" component={Sales} />
-            <Route path="/config" component={KervConfig} />
-          </div>
-        </Router>
-        {/* <Menu /> */}
-        {/* <Sales /> */}
+        <NavBar />
       </div>
     );
   }
