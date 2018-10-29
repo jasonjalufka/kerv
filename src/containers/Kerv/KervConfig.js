@@ -1,35 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import MenuConfigFormContainer from '../../components/MenuConfigFormContainer';
+import MenuConfig from '../../components/MenuConfig';
 import InventoryConfig from '../../components/InventoryConfig';
 import * as actionTypes from "../../store/actions";
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import Collapse from '@material-ui/core/Collapse';
+import {Grid, Card, List, ListItem, ListItemText, ListSubheader} from '@material-ui/core/';
 
 class KervConfig extends Component {
     state ={
-        open: false,
-        editSelection: null, 
+        // open: false,
+        displayMenu: false, 
         displayInventory: false
     };
 
     handleDisplayInventory = () => {
-        this.setState(state =>({displayInventory: true, editSelection: null}));
+        this.setState(state =>({displayInventory: true, displayMenu: false}));
     }
 
-    handleExpand = () => {
-        this.setState(state =>({open: !state.open}));
-    }
-
-    handleSelectEdit(key){
-        this.setState(({editSelection: key, displayInventory: false }));
+    handleDisplayMenu = () => {
+        this.setState(state => ({displayMenu: true, displayInventory: false }));
     }
 
     handleSubmit = formValues =>{
@@ -42,25 +30,15 @@ class KervConfig extends Component {
             <div>
                 <div>
                     <Grid container spacing={24}>
-                        <Grid item xs>
+                        <Grid item xs={3}>
                             <Card>
                                 <List subheader={<ListSubheader component="div">Configurations</ListSubheader>}>
-                                    <ListItem button onClick={this.handleExpand}>
-                                        <ListItemText primary={"Menu Options"}/>
-                                        {this.state.open ? <ExpandLess /> : <ExpandMore />}
+                                    <ListItem button onClick={this.handleDisplayMenu}>
+                                        <ListItemText primary={"Update Menu"}/>
+                                        {/* {this.state.open ? <ExpandLess /> : <ExpandMore />} */}
                                     </ListItem>
-                                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                                        <List component="div" disablePadding subheader={<ListSubheader component="div">Choose one to view</ListSubheader>}>
-                                            <ListItem button onClick={()=>{this.handleSelectEdit("drink")}}>
-                                                <ListItemText inset primary={"Drinks"}/>
-                                            </ListItem>
-                                            <ListItem button onClick={()=>{this.handleSelectEdit("milk")}}>
-                                                <ListItemText inset primary={"Milk"}/>
-                                            </ListItem>
-                                        </List>
-                                    </Collapse>
                                     <ListItem button onClick={this.handleDisplayInventory}>
-                                        <ListItemText primary={"Inventory Options"}/>
+                                        <ListItemText primary={"Update Inventory"}/>
                                     </ListItem>
                                 </List>
                             </Card>
@@ -69,8 +47,8 @@ class KervConfig extends Component {
                         <Grid item xs>
                             <Card>
                             {/* conditional rendering of either menu or inventory config component */}
-                                {this.state.editSelection&&
-                                <MenuConfigFormContainer selection={this.state.editSelection} onSubmit={this.handleSubmit}/>
+                                {this.state.displayMenu&&
+                                <MenuConfig onSubmit={this.handleSubmit}/>
                                 }
                                 {this.state.displayInventory&&<InventoryConfig />}
                             </Card>

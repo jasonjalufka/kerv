@@ -1,25 +1,20 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
-// import { connect } from 'react-redux'
-import Card from '@material-ui/core/Card';
-import Grid from '@material-ui/core/Grid';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Button from '@material-ui/core/Button';
+import { Field, FieldArray, reduxForm } from 'redux-form';
 import inventory from '../data/inventory';
 import drinks from '../data/drinks';
 import milkCost from "../data/milkCost";
-import { TextField } from '@material-ui/core';
+import { TextField, ListSubheader, List, ListItem, Button, Grid, Card} from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 const renderTextField = ({
     input,
     defaultValue,
+    label,
 }) => (
         <TextField
             defaultValue={defaultValue}
             onChange={input.onChange}
+            label={label}
         />
     )
 
@@ -28,68 +23,79 @@ let handleChange = e => {
     return e.target.value;
 }
 
-let MenuConfig = props => {
-    const { handleSubmit } = props;
+const renderDrinkFields = ({fields}) => (
+    <List subheader={<ListSubheader component="div">Additional</ListSubheader>}>
+        {
+            fields.map((drink, index) => (
+                <ListItem>
+                    {/* <Fields id={index} names={["drinkName"+index, 'drinkPrice'+index]} component={renderDrinkField}/> */}
+                    {/* <FieldArray name={"newEntry" + index} component={renderDrinkInput} /> */}
+                    <Field label="Drink Name" name={"name" + index} component={renderTextField}/>
+                    <Field label="Drink Price" name={"price" + index} component={renderTextField}/>
+                </ListItem>
+            ))
+        }
+        <ListItem>
+            <Button mini onClick={()=>{fields.push()}} variant="fab" color="primary" aria-label="Add">
+                <AddIcon />
+            </Button>
+        </ListItem>
+    </List>
+)
+
+
+
+let MenuConfig = (props) => {
+    const { handleSubmit} = props;
     const submitForm = (formValues) => {
         props.onSubmit(formValues);
         console.log("in submitForm of MenuConfig");
         console.log(formValues);
         props.reset();
     }
+    
     return (
-        <div>
             <Card>
-                <Grid container spacing={24}>
-                    {/* Display the drink options */}
-                    {props.selection === "drink" ?
+                <form onSubmit={handleSubmit(submitForm)}>
+                    <Grid container spacing={24}>
                         <Grid item xs>
-                            <form onSubmit={handleSubmit(submitForm)}>
-                                <List subheader={<ListSubheader component="div">Drinks</ListSubheader>}>
-                                    {
-                                        Object.keys(drinks).map((drink, index) => (
-                                            <Grid container space={8} key={index}>
-                                                <Grid item xs>
-                                                    <ListItem>
-                                                        <Field name={drink} onChange={handleChange} defaultValue={drink} component={renderTextField} />
-                                                        <Field name={drink + "Price"} onChange={handleChange} defaultValue={drinks[drink].price} component={renderTextField} />
-                                                    </ ListItem>
-                                                </Grid>
-                                            </Grid>
-                                        ))
-                                    }
-                                </List>
-                                <Button type="submit" variant="contained" color="primary">Submit</Button>
-                            </form>
+                            <List subheader={<ListSubheader component="div">Drinks</ListSubheader>}>
+                                {
+                                    Object.keys(drinks).map((drink, index) => ( 
+                                        <ListItem>
+                                            <Field name={drink} onChange={handleChange} defaultValue={drink} component={renderTextField} />
+                                            <Field name={drink + "Price"} onChange={handleChange} defaultValue={drinks[drink].price} component={renderTextField} />
+                                        </ ListItem>                                                
+                                    ))
+                                }
+                                {/* <Button mini onClick={addNewField} variant="fab" color="primary" aria-label="Add">
+                                    <AddIcon />
+                                </Button> */}
+                            </List>
+                            <FieldArray name={"newDrinks"} component={renderDrinkFields}/>
                         </Grid>
-                        : ''
-                    }
-
-                    {/* Display milk options */}
-                    {props.selection === "milk" ?
                         <Grid item xs>
-                            <form onSubmit={handleSubmit(submitForm)}>
-                                <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
-                                    {
-                                        Object.keys(inventory.milk).map((milk, index) => (
-                                            <ListItem>
-                                                <ListItemText primary={milk} secondary={milkCost[milk] !== 0 ? '+ $' + milkCost[milk] : ''} />
-                                            </ ListItem>
-                                        ))
-                                    }
-                                </List>
-                                <Button type="submit" variant="contained" color="primary">Submit</Button>
-                            </form>
+                            <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
+                                {
+                                    Object.keys(inventory.milk).map((milk, index) => (
+                                        <ListItem>
+                                            <Field name={milk} onChange={handleChange} defaultValue={milk} component={renderTextField} />
+                                            <Field name={milk + "Price"} onChange={handleChange} defaultValue={milkCost[milk] !== 0 ? milkCost[milk] : ''} component={renderTextField}/>
+                                        </ ListItem>
+                                    ))
+                                }
+                            </List>
                         </Grid>
-                        : ''
-                    }
-                </Grid>
+                    </Grid>
+                    <Button type="submit" variant="contained" color="primary">Submit</Button>
+                </form>       
             </Card>
-        </div>
     );
+                 
 };
 
 MenuConfig = reduxForm({
-
+    form: 'menuConfig'
 })(MenuConfig)
 
 export default MenuConfig
