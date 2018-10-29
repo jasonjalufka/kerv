@@ -11,7 +11,9 @@ export const getData = () => ({
     [CALL_API]: {
       endpoint: '/api/hello',
       method: 'GET',
-      types: [GET_DATA_REQUEST, GET_DATA_SUCCESS, GET_DATA_FAILURE]
+      types: [{type: GET_DATA_REQUEST,
+                payload: {express: 'We waiting'}},
+         GET_DATA_SUCCESS, GET_DATA_FAILURE]
     }
 })
   

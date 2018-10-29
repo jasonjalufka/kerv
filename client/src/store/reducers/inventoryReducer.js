@@ -28,6 +28,9 @@ const reducer = (state = initialState, action) => {
         [action.order.beanOption]: state[action.order.beanOption] - 20,
         [action.order.milkOption]: state[action.order.milkOption] - drinks[action.order.drinkOption].milk
       }
+    case actionTypes.GET_DATA_REQUEST:
+      console.log("Inside Inventory Reducer" + action.payload.express);
+      return state;
     default:
       return state;
   }
