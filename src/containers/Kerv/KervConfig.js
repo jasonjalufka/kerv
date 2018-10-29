@@ -26,42 +26,39 @@ class KervConfig extends Component {
     }
 
     render() {
-        return (
-            <div>
-                <div>
-                    <Grid container spacing={24}>
-                        <Grid item xs={3}>
-                            <Card>
-                                <List subheader={<ListSubheader component="div">Configurations</ListSubheader>}>
-                                    <ListItem button onClick={this.handleDisplayMenu}>
-                                        <ListItemText primary={"Update Menu"}/>
-                                        {/* {this.state.open ? <ExpandLess /> : <ExpandMore />} */}
-                                    </ListItem>
-                                    <ListItem button onClick={this.handleDisplayInventory}>
-                                        <ListItemText primary={"Update Inventory"}/>
-                                    </ListItem>
-                                </List>
-                            </Card>
-                            {/* insert list options */}
-                        </Grid>
-                        <Grid item xs>
-                            <Card>
-                            {/* conditional rendering of either menu or inventory config component */}
-                                {this.state.displayMenu&&
-                                <MenuConfig onSubmit={this.handleSubmit}/>
-                                }
-                                {this.state.displayInventory&&<InventoryConfig />}
-                            </Card>
-                        </Grid>
+        return (  
+                <Grid container spacing={24}>
+                    <Grid item xs={3}>
+                        <Card>
+                            <List subheader={<ListSubheader component="div">Configurations</ListSubheader>}>
+                                <ListItem button onClick={this.handleDisplayMenu}>
+                                    <ListItemText primary={"Update Menu"}/>
+                                    {/* {this.state.open ? <ExpandLess /> : <ExpandMore />} */}
+                                </ListItem>
+                                <ListItem button onClick={this.handleDisplayInventory}>
+                                    <ListItemText primary={"Update Inventory"}/>
+                                </ListItem>
+                            </List>
+                        </Card>
+                        {/* insert list options */}
                     </Grid>
-                </div>
-            </div>
+                    <Grid item xs>
+                        <Card>
+                        {/* conditional rendering of either menu or inventory config component */}
+                            {this.state.displayMenu&&
+                            <MenuConfig onSubmit={this.handleSubmit}/>
+                            }
+                            {this.state.displayInventory&&<InventoryConfig />}
+                        </Card>
+                    </Grid>
+                </Grid>
         );
     }
 }
 
 const mapStateToProps = state => {
-    return {};
+    return {
+    };
 };
 
 const mapDispatchToProps = dispatch => {
