@@ -2,24 +2,27 @@ const express = require('express');
 const app = express();
 
 const port = process.env.PORT || 5000;
-let inventory = [
+
+let milk = [
     {
         "id": 0, 
         "name": "oat",
         "amount": 100, 
-        "type" : "milk"
+        "type" : "milk",
+        "cost" : 1
     },
     {
         "id": 1, 
         "name": "whole",
         "amount": 200, 
-        "type" : "milk"
-    },
+        "type" : "milk",
+    }]
+    let bean = [
     {
         "id": 2, 
         "name": "ethiopian",
         "amount": 100, 
-        "type" : "bean"
+        "type" : "bean",
     },
     {
         "id": 3, 
@@ -42,40 +45,13 @@ let drink = [
     }
 ]
 
-let cost = [
-    {
-        "id": 0, 
-        "name": "espresso",
-        "price": 3, 
-        "type": "drink"
-    },
-    {
-        "id": 1, 
-        "name": "cappuccino",
-        "price": 4.5, 
-        "type": "drink"
-    },
-    {
-        "id": 2, 
-        "name": "oat", 
-        "price": 1,
-        "type": "milk"
-    },
-    {
-        "id": 3, 
-        "name": "whole", 
-        "price": 0,
-        "type": "milk"
-    }
-]
 let kerv = {
-    "inventory" : inventory, 
+    "bean" : bean, 
     "drink": drink, 
-    "cost" : cost
+    "milk": milk
 }
 app.get('/api/getKerv', (req, res) => {
     res.send({ kerv: kerv });
-    console.log(kerv);
 })
 
 app.listen(port, () => {
