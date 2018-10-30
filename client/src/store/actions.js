@@ -9,11 +9,9 @@ export const GET_DATA_FAILURE = "GET_DATA_SUCCESS";
 
 export const getData = () => ({
     [CALL_API]: {
-      endpoint: '/api/hello',
+      endpoint: '/api/getKerv',
       method: 'GET',
-      types: [{type: GET_DATA_REQUEST,
-                payload: {express: 'We waiting'}},
-         GET_DATA_SUCCESS, GET_DATA_FAILURE]
+      types: [GET_DATA_REQUEST,GET_DATA_SUCCESS, GET_DATA_FAILURE]
     }
 })
   
