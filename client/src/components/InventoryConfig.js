@@ -5,7 +5,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import inventory from '../data/inventory';
 import Grid from '@material-ui/core/Grid';
 
 let InventoryConfig = (props) => {
@@ -22,7 +21,7 @@ let InventoryConfig = (props) => {
 					<Grid item xs>
 						<List subheader={<ListSubheader component="div">Bean Inventory</ListSubheader>}>
 							{
-								Object.keys(inventory.beans).map((bean, index) => (
+								Object.keys(props.kerv.bean).map((bean, index) => (
 									<ListItem button>
 										<ListItemText primary={bean} />
 									</ListItem>
@@ -33,7 +32,7 @@ let InventoryConfig = (props) => {
 					<Grid item xs>
 						<List subheader={<ListSubheader component="div">Milk Inventory</ListSubheader>}>
 							{
-								Object.keys(inventory.milk).map((milk, index) => (
+								Object.keys(props.kerv.milk).map((milk, index) => (
 									<ListItem button>
 										<ListItemText primary={milk} />
 									</ListItem>

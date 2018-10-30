@@ -46,9 +46,9 @@ class KervConfig extends Component {
                         <Card>
                         {/* conditional rendering of either menu or inventory config component */}
                             {this.state.displayMenu&&
-                            <MenuConfig onSubmit={this.handleSubmit}/>
+                            <MenuConfig kerv={this.props.kerv} onSubmit={this.handleSubmit}/>
                             }
-                            {this.state.displayInventory&&<InventoryConfig />}
+                            {this.state.displayInventory&&<InventoryConfig kerv={this.props.kerv} />}
                         </Card>
                     </Grid>
                 </Grid>
@@ -58,8 +58,9 @@ class KervConfig extends Component {
 
 const mapStateToProps = state => {
     return {
+      kerv: state.kerv
     };
-};
+  };
 
 const mapDispatchToProps = dispatch => {
     return {

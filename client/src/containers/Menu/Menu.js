@@ -1,18 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actionTypes from "../../store/actions";
-import drinks from '../../data/drinks';
-import milkCost from '../../data/milkCost';
 import MenuForm from '../../components/MenuForm';
 import OrderSummary from '../../components/OrderSummary';
 import Card from '@material-ui/core/Card';
-import { getData } from '../../store/actions';
 
 class Menu extends Component {
-  componentDidMount() {
-    console.log(this.props.onGetData());
-    
-  }
   //Resets order state to 0 to be used for the next order
   handlePlaceOrder = order => {
     console.log("[handlePlaceOrder]");
@@ -22,9 +15,10 @@ class Menu extends Component {
   handleAddToOrder = order => {
     let itemCost = 0;
 
-    itemCost = drinks[order.drinkOption].price;
+    itemCost = this.props.kerv.drink[order.drinkOption].price;
     if (order.milkOption)
-      itemCost += milkCost[order.milkOption];
+      if(this.props.kerv.milk[order.milkOption].price)
+        itemCost += this.props.kerv.milk[order.milkOption].price;
     order.total = itemCost;
     this.props.onAddToOrder(order);
   }
@@ -34,7 +28,7 @@ class Menu extends Component {
       <div className="menu">
         <Card>
           <h2>Menu</h2>
-          <MenuForm onSubmit={this.handleAddToOrder} />
+          <MenuForm kerv={ this.props.kerv } onSubmit={this.handleAddToOrder} />
         </Card>
 
         <Card>
@@ -53,7 +47,7 @@ class Menu extends Component {
 const mapStateToProps = state => {
   return {
     sales: state.sales,
-    milk: state.inventory.milk,
+    kerv: state.kerv,
     order: state.order
   };
 };
@@ -65,8 +59,7 @@ const mapDispatchToProps = dispatch => {
     },
     onSubmitOrder: order => {
       dispatch({ type: actionTypes.ADD_SALE, order: order });
-    }, 
-    onGetData: () => dispatch(getData())
+    }
   };
 };
 

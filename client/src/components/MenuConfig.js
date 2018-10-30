@@ -1,8 +1,5 @@
 import React from 'react';
 import { Field, FieldArray, reduxForm } from 'redux-form';
-import inventory from '../data/inventory';
-import drinks from '../data/drinks';
-import milkCost from "../data/milkCost";
 import { TextField, ListSubheader, List, ListItem, Button, Grid, Card} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -61,10 +58,10 @@ let MenuConfig = (props) => {
                         <Grid item xs>
                             <List subheader={<ListSubheader component="div">Drinks</ListSubheader>}>
                                 {
-                                    Object.keys(drinks).map((drink, index) => ( 
+                                    Object.keys(props.kerv.drink).map((drink, index) => ( 
                                         <ListItem>
                                             <Field name={drink} onChange={handleChange} defaultValue={drink} component={renderTextField} />
-                                            <Field name={drink + "Price"} onChange={handleChange} defaultValue={drinks[drink].price} component={renderTextField} />
+                                            <Field name={drink + "Price"} onChange={handleChange} defaultValue={props.kerv.drink[drink].price} component={renderTextField} />
                                         </ ListItem>                                                
                                     ))
                                 }
@@ -77,10 +74,10 @@ let MenuConfig = (props) => {
                         <Grid item xs>
                             <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
                                 {
-                                    Object.keys(inventory.milk).map((milk, index) => (
+                                    Object.keys(props.kerv.milk).map((milk, index) => (
                                         <ListItem>
                                             <Field name={milk} onChange={handleChange} defaultValue={milk} component={renderTextField} />
-                                            <Field name={milk + "Price"} onChange={handleChange} defaultValue={milkCost[milk] !== 0 ? milkCost[milk] : ''} component={renderTextField}/>
+                                            <Field name={milk + "Price"} onChange={handleChange} defaultValue={props.kerv.milk[milk].price ? props.kerv.milk[milk].price : ''} component={renderTextField}/>
                                         </ ListItem>
                                     ))
                                 }

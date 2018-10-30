@@ -5,7 +5,7 @@ import { apiMiddleware } from 'redux-api-middleware';
 import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux';
 import salesReducer from './store/reducers/salesReducer';
-import inventoryReducer from './store/reducers/inventoryReducer';
+import kervReducer from './store/reducers/kervReducer'
 import orderReducer from './store/reducers/orderReducer';
 import { composeWithDevTools } from "redux-devtools-extension";
 import './index.css';
@@ -14,8 +14,8 @@ import App from './App';
 
 const rootReducer = combineReducers({
 	sales: salesReducer,
-	inventory: inventoryReducer,
 	order: orderReducer,
+	kerv: kervReducer,
 	form: formReducer
 });
 
