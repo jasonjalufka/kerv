@@ -1,7 +1,10 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
-
 const port = process.env.PORT || 5000;
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 let milk = [
     {
@@ -52,8 +55,18 @@ let kerv = {
     "drink": drink, 
     "milk": milk
 }
+
+
 app.get('/api/getKerv', (req, res) => {
     res.send({ kerv: kerv });
+})
+
+app.post('/api/addSale', (req, res) => {
+    Object.keys(req.body.inventory).map((type, index) => {
+        Object.keys(req.body.inventory[type]).map((subType, innerIndex) =>{
+           kerv[type][innerIndex] = req.body.inventory[type][subType]
+        })
+    })
 })
 
 app.listen(port, () => {

@@ -4,11 +4,14 @@ import * as actionTypes from "../../store/actions";
 import MenuForm from '../../components/MenuForm';
 import OrderSummary from '../../components/OrderSummary';
 import Card from '@material-ui/core/Card';
+import {addSale} from '../../store/actions'
 
 class Menu extends Component {
   //Resets order state to 0 to be used for the next order
   handlePlaceOrder = order => {
-    console.log("[handlePlaceOrder]");
+    console.log("[handlePlaceOrder]", order);
+    this.props.onAddSale({"order": order, "inventory" : { "milk" : this.props.kerv.milk, 
+                          "bean":this.props.kerv.bean}});
     this.props.onSubmitOrder(order);
   }
 
@@ -59,7 +62,8 @@ const mapDispatchToProps = dispatch => {
     },
     onSubmitOrder: order => {
       dispatch({ type: actionTypes.ADD_SALE, order: order });
-    }
+    },
+    onAddSale: (order) => dispatch(addSale(order))
   };
 };
 
