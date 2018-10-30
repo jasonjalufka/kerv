@@ -9,7 +9,7 @@ let milk = [
         "name": "oat",
         "amount": 100, 
         "type" : "milk",
-        "cost" : 1
+        "price" : 1
     },
     {
         "id": 1, 
@@ -36,12 +36,14 @@ let drink = [
     {
         "id": 0, 
         "name": "espresso",
-        "milkReq": 0
+        "milkReq": 0, 
+        "price" : 3
     },
     {
         "id": 1, 
         "name": "cappuccino",
-        "milkReq": 4
+        "milkReq": 4,
+        "price" : 4.5
     }
 ]
 
