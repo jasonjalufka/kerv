@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import { apiMiddleware } from 'redux-api-middleware';
 import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux';
@@ -19,10 +19,11 @@ const rootReducer = combineReducers({
 	form: formReducer
 });
 
+const composeEnhancer = composeWithDevTools || compose;
+
 const store = createStore(
 	rootReducer,
-	composeWithDevTools(),
-	applyMiddleware(apiMiddleware)
+	composeEnhancer(applyMiddleware(apiMiddleware))
 );
 
 ReactDOM.render(

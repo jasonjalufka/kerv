@@ -20,10 +20,10 @@ let NavBar = props => {
         < Router >
             <div>
                 <AppBar position="static" className={classes.appBar}>
-                    <Tabs fullWidth>
-                        <Tab component={Link} to="/" label="Order" />
-                        <Tab component={Link} to="/sales" label="Sales" />
-                        <Tab component={Link} to="/config" label="Settings" />
+                    <Tabs value={0} fullWidth>
+                        <Tab value={0} component={Link} to="/" label="Order" />
+                        <Tab value={1} component={Link} to="/sales" label="Sales" />
+                        <Tab value={2} component={Link} to="/config" label="Settings" />
                     </Tabs>
                 </AppBar>
                 <Route exact path="/" component={Menu} />
