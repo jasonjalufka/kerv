@@ -1,20 +1,17 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Server to accept http requests",
-  "main": "server.js",
+  "description": "",
   "scripts": {
-    "client": "cd ../client && npm start",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"npm start\" \"npm run client\""
+    "start": "cd dist && node server.js",
+    "build": "./build.sh",
+    "dev": "cd src && npm run dev"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "concurrently": "^4.0.1",
-    "express": "^4.16.4",
-    "nodemon": "^1.18.5"
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
   }
 }
