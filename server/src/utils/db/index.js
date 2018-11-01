@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
-const connection = mongoose.connect("http://127.0.0.1:53982/kerv");
+const connection = mongoose.connect("mongodb://localhost:27017/kerv");
 
 connection
     .then(db => {
