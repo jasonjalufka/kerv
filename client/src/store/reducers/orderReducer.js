@@ -15,7 +15,7 @@ const reducer = (state = initialState, action) => {
                 orderTotal: state.orderTotal + action.order.total
             }
             return newState;
-        case actionTypes.ADD_SALE:
+        case actionTypes.ADD_SALE_SUCCESS:
             return { orderCount: 0, orderTotal: 0 };
         default:
             return state;

@@ -1,7 +1,6 @@
 Drink = require('../models/drink');
 
 exports.get = () => {
-    console.log('inside drink controller');
 	let drink = []
     return Drink.find()
 	.then(drinkDocs =>{

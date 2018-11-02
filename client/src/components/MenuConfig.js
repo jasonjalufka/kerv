@@ -15,6 +15,14 @@ const renderTextField = ({
         />
     )
 
+const renderField = (field) => (
+    <div className="input-row">
+        <input {...field.input} type="text"/>
+        {field.meta.touched && field.meta.error && 
+        <span className="error">{field.meta.error}</span>}
+    </div>
+    )
+
 let handleChange = e => {
     console.log("in handleChange");
     return e.target.value;
@@ -61,7 +69,7 @@ let MenuConfig = (props) => {
                                     Object.keys(props.kerv.drink).map((drink, index) => ( 
                                         <ListItem>
                                             <Field name={drink} onChange={handleChange} defaultValue={drink} component={renderTextField} />
-                                            <Field name={drink + "Price"} onChange={handleChange} defaultValue={props.kerv.drink[drink].price} component={renderTextField} />
+                                            <Field name={drink +"price"} onChange={handleChange} defaultValue={props.kerv.drink[drink].price} component={renderTextField} />
                                         </ ListItem>                                                
                                     ))
                                 }

@@ -22,7 +22,6 @@ class KervConfig extends Component {
 
     handleSubmit = formValues =>{
         console.log("attempting submit on drink" );
-        this.props.onSubmitChange(formValues);
     }
 
     render() {
@@ -64,9 +63,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onSubmitChange: test => {
-            dispatch({ type: actionTypes.TEST, test: test });
-          }
     };
 };
 

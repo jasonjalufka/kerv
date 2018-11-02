@@ -10,9 +10,8 @@ class Menu extends Component {
   //Resets order state to 0 to be used for the next order
   handlePlaceOrder = order => {
     console.log("[handlePlaceOrder]", order);
-    this.props.onAddSale({"order": order, "inventory" : { "milk" : this.props.kerv.milk, 
+    this.props.onAddSale({order, "inventory" : { "milk" : this.props.kerv.milk, 
                           "bean":this.props.kerv.bean}});
-    this.props.onSubmitOrder(order);
   }
 
   handleAddToOrder = order => {
@@ -59,9 +58,6 @@ const mapDispatchToProps = dispatch => {
   return {
     onAddToOrder: order => {
       dispatch({ type: actionTypes.ADD_ORDER_ITEM, order: order });
-    },
-    onSubmitOrder: order => {
-      dispatch({ type: actionTypes.ADD_SALE, order: order });
     },
     onAddSale: (order) => dispatch(addSale(order))
   };
