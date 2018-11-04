@@ -5,9 +5,10 @@ const Populate = require('../populateDB');
 connection
     .then(db => {
         console.log("connected to db");
+        // Populate.populate();
         return db;
     }).catch(err => {
         console.log("ERROR UTIL/DB/INDEX", err);
     })
-    
+
 module.exports = connection;

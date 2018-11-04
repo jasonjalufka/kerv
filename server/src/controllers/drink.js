@@ -15,3 +15,13 @@ exports.get = () => {
 			console.log("DRINK FIND ERROR: ", err)
 		})
 }
+
+exports.getId = (name) => {
+	return Drink.findOne({ name: name }, '_id')
+		.then(drinkDoc => {
+			return drinkDoc._id
+		})
+		.catch(err => {
+			console.log("Could not find drink by name", err);
+		})
+}
