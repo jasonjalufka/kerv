@@ -8,7 +8,7 @@ class Sales extends Component {
     constructor(props){
         super(props);
         this.state = {
-            data: 'before'
+            totalRevenue: 'before'
         };
     }
     componentDidMount() {
@@ -27,7 +27,7 @@ class Sales extends Component {
             <div>
                 <h1>Welcome to Sales</h1>
                 <button onClick={() => {this.fetchSalesData('drink')}}>DISPLAY DRINK</button>
-                <h2>${this.state.data}</h2>                
+                <h2>${this.state.totalRevenue}</h2>                
             </div>
         );
     }

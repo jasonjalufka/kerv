@@ -1,7 +1,6 @@
 const OrderItem = require('../models/orderItem');
 const Drink = require('../controllers/drink');
 const Inventory = require('../controllers/inventory');
-const mongoose = require('mongoose');
 
 
 exports.post = (orderItems) => {
@@ -25,12 +24,15 @@ exports.post = (orderItems) => {
         )
 }
 
-exports.get = (req, res) => {
+exports.getTotal = (req, res) => {
     OrderItem.find()
         .then(orderItem => {
+            total = 0;
             orderItem.map((orderItemEntry, index) => {
                 console.log('Entry: ', index, 'OrderItemEntry: ', orderItemEntry);
+                total = total + parseFloat(orderItemEntry.total);
             })
+            res.send({'totalRevenue': total});
         })
         .catch(err => {
             console.log('ERROR READING DOCUMENTS FROM ORDER', err)

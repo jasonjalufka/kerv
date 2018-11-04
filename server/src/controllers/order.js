@@ -1,7 +1,5 @@
-const mongoose = require('mongoose');
 Order = require('../models/order');
 OrderItem = require('../controllers/orderItem');
-OrderItemModel = require('../models/orderItem');
 
 exports.post = (req, res) => {
     let orderDoc = new Order()
