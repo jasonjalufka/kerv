@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 module.exports = OrderSchema = new mongoose.Schema(
     {
-        orderItems: [mongoose.Schema.Types.ObjectId],
+        orderItems: [{type: mongoose.Schema.Types.ObjectId, ref: 'OrderItem'}],
         date: Date,
         tip: Number,
         subtotal: Number,

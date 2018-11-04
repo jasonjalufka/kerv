@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import MenuConfig from '../../components/MenuConfig';
 import InventoryConfig from '../../components/InventoryConfig';
-import * as actionTypes from "../../store/actions";
 import {Grid, Card, List, ListItem, ListItemText, ListSubheader} from '@material-ui/core/';
 
 class KervConfig extends Component {

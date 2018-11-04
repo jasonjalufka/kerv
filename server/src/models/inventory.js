@@ -6,9 +6,7 @@ module.exports = InventorySchema = new mongoose.Schema(
         type: String,
         price: Number,
         amount: Number
-    },
-    {
-        collection : 'inventory'
-    })
+    }
+    )
 
 module.exports = exports = mongoose.model('Inventory', InventorySchema);

@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 module.exports = OrderItemSchema = new mongoose.Schema(
     {
-        drink: String,
-        milk: String,
-        bean: String,
+        drink: {type: mongoose.Schema.Types.ObjectId, ref: 'Drink'},
+        milk: {type: mongoose.Schema.Types.ObjectId, ref: 'Inventory'},
+        bean: {type: mongoose.Schema.Types.ObjectId, ref: 'Inventory'},
         total: String
     }
 )

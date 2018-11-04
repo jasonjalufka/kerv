@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import './App.css';
 import NavBar from './components/NavBar';
-import { getData } from './store/actions';
+import { getKervData } from './store/actions';
 
 class App extends Component {
 
   componentDidMount() {
-    console.log(this.props.onGetData());
+    this.props.onGetKervData();
   }
  
   render() {
@@ -22,7 +22,7 @@ class App extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onGetData: () => dispatch(getData())
+    onGetKervData: () => dispatch(getKervData())
   };
 };
 

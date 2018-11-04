@@ -1,24 +1,31 @@
 const OrderItem = require('../models/orderItem');
+const Drink = require('../models/drink');
+const Inventory = require('../models/inventory');
+const mongoose = require('mongoose');
 
 exports.post = (orderItems) => {
     // Only map over keys that are numeric (orderkeys)
-    const orderItemDocs = [];
-    Object.keys(orderItems).filter(element => parseInt(element) == element).map((itemKey, index) => {
-        let orderItemDoc = new OrderItem({
-            drink: orderItems[itemKey].drinkOption,
-            milk: orderItems[itemKey].milkOption,
-            bean: orderItems[itemKey].beanOption,
-            total: orderItems[itemKey].total
+    let orderItemDocs = []
+    let orderItemsKeys = Object.keys(orderItems).filter(element => parseInt(element) == element);
+    let orderSize = orderItemsKeys.length
+
+     // map over all the order Items and call populate doc on each
+     // check the orderSize and compare
+}
+
+exports.get = (req, res) => {
+
+    OrderItem.find()
+    .then(orderItem =>{
+        orderItem.map((orderItemEntry, index) => {
+            console.log('Entry: ', index, 'OrderItemEntry: ', orderItemEntry);
         })
-        orderItemDocs.push(orderItemDoc);
     })
+    .catch(err =>{
+        console.log('ERROR READING DOCUMENTS FROM ORDER', err)
+    })
+}
 
-    return OrderItem.insertMany(orderItemDocs)
-        .then(data => {
-            return data;
-        })
-        .catch(err => {
-            console.log("ERROR TRYING TO ADD ORDERITEMS");
-        })
-
+exports.populateOrderItemDoc = () => {
+    // call getId for milk, bean, and drink
 }

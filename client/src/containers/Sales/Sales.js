@@ -1,19 +1,33 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+const API = '/api/sales/';
+const DEFAULT_QUERY = '';
+
 class Sales extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            data: 'before'
+        };
+    }
+    componentDidMount() {
+        this.fetchSalesData(DEFAULT_QUERY)
+      }
+
+    fetchSalesData = (subRoute) => {
+        let filter = (subRoute ? subRoute : DEFAULT_QUERY)
+        fetch(API + filter)
+        .then(response => response.json())
+        .then(data => this.setState(data))
+        .catch(err => console.log('ERROR: ', err));
+    }
     render() {
         return (
             <div>
                 <h1>Welcome to Sales</h1>
-                <h3>Sales Processed: {this.props.sales.salesCount}</h3>
-                <h3>{this.props.sales[0].orderTotal ?
-                    'Oh, Oscar: $' + Object.keys(this.props.sales).map((order, index) => {
-                        return this.props.sales[order].orderTotal
-                    }).filter(element => element !== undefined).reduce((total, amount) => (
-                        total + amount
-                    )).toFixed(2) : 'You keep the money'}</h3>
-
+                <button onClick={() => {this.fetchSalesData('drink')}}>DISPLAY DRINK</button>
+                <h2>${this.state.data}</h2>                
             </div>
         );
     }
