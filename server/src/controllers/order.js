@@ -1,5 +1,6 @@
 Order = require('../models/order');
 OrderItem = require('../controllers/orderItem');
+const mongoose = require('mongoose');
 
 exports.post = (req, res) => {
     let orderDoc = new Order()
@@ -11,7 +12,7 @@ exports.post = (req, res) => {
     OrderItem.post(req.body.order)
         .then(orderItems => {
             orderItems.map(orderItem => {
-                orderDoc.orderItems.push(orderItem._id)
+                orderDoc.orderItems.push(orderItem._id);
             })
             // //save or insert here
             orderDoc.save()
@@ -43,19 +44,90 @@ exports.get = (req, res) => {
 exports.getSalesDates = (req, res) => {
     Order.aggregate(
         [
-            { $group: { 
-                _id: {$month: '$date'},
-                count: {$sum: 1},
-                total: {$sum:'$totalCost'}
-            }}
+            {
+               $unwind: '$orderItems'
+            },
+            {
+                $group: {
+                    _id: {$month: '$date'},
+                    orderItems: {$addToSet: '$orderItems'} ,
+                }
+            }, 
+            {
+                $lookup: {
+                    from: 'orderitems',
+                    localField: 'orderItems',
+                    foreignField: '_id',
+                    as: 'orderItems'
+                }
+            },
+            {
+                 $unwind: '$orderItems'
+            },
+            {
+                $lookup: {
+                    from: 'drinks',
+                    localField: 'orderItems.drink',
+                    foreignField: '_id',
+                    as: 'orderItems.drink'
+                }
+             },
+             {
+                $lookup: {
+                    from: 'inventories',
+                    localField: 'orderItems.milk',
+                    foreignField: '_id',
+                    as: 'orderItems.milk'
+                }
+             },
+             {
+                $lookup: {
+                    from: 'inventories',
+                    localField: 'orderItems.bean',
+                    foreignField: '_id',
+                    as: 'orderItems.bean'
+                }
+             },
+             {
+                 $project: {
+                    '_id': 1,
+                    'orderItems.total': 1,
+                    'orderItems.drink.name': 1,
+                    'orderItems.drink.price': 1, 
+                    'orderItems.bean.name': 1, 
+                    'orderItems.milk.name': 1, 
+                    'orderItems.milk.price': 1 
+                }
+            }
         ],
         function(err,results) {
             if (err) throw err;
             let response = {}
             results.map(month => {
-                response[month._id] = {'salesCount': month.count, 'totalRevnue': month.total}
+                if(!response.hasOwnProperty(month._id)){
+                    response[month._id] = {'drinkCount': 1, 'totalRevenue': parseFloat(month.orderItems.total), drinks : {}, milk : {}}
+                }
+                else {
+                    response[month._id].drinkCount += 1;
+                    response[month._id].totalRevenue += parseFloat(month.orderItems.total)
+                }
+
+                if(!response[month._id].drinks.hasOwnProperty(month.orderItems.drink[0].name)){
+                    response[month._id].drinks[month.orderItems.drink[0].name] = {'drinkCount': 1, 'totalDrinkRevenue' : parseFloat(month.orderItems.drink[0].price)}
+                }
+                else {
+                    response[month._id].drinks[month.orderItems.drink[0].name].drinkCount += 1;
+                    response[month._id].drinks[month.orderItems.drink[0].name].totalDrinkRevenue += parseFloat(month.orderItems.drink[0].price);
+                }
+                if(!response[month._id].milk.hasOwnProperty(month.orderItems.milk.name) && month.orderItems.milk[0]!= undefined){
+                    response[month._id].milk[month.orderItems.milk[0].name] = {'milkCount': 1, 'totalMilkRevenue' : parseFloat(month.orderItems.milk[0].price)}
+                }
+                else if(month.orderItems.milk[0]!=undefined){
+                    response[month._id].milk[month.orderItems.milk[0].name].milkCount += 1;
+                    response[month._id].milk[month.orderItems.milk[0].name].totalMilkRevenue += parseFloat(month.orderItems.milk[0].price);
+                }
             })
-            res.send(response);
+            res.send(response)           
         }
     )
 }
