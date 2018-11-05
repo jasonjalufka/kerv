@@ -22,7 +22,6 @@ class Sales extends Component {
         .then(response => response.json())
         .then(data => {
             this.setState(data)
-            this.setState({showDrinkData: true})
             console.log(this.state);
         })
         .catch(err => console.log('ERROR: ', err));
@@ -31,7 +30,7 @@ class Sales extends Component {
         return (
             <div>
                 <h1>Welcome to Sales</h1>
-                <button onClick={() => {this.fetchSalesData('drinks')}}>DISPLAY DRINK</button>
+                <button onClick={() => {this.fetchSalesData('drink')}}>DISPLAY DRINK</button>
                 {this.state.latte&&<div>
                     espresso {this.state.espresso.total}
                     cortado {this.state.cortado.total}
@@ -39,7 +38,13 @@ class Sales extends Component {
                     cappuccino {this.state.cappuccino.total}
                     latte {this.state.latte.total}
                 </div>}
-                <h2>${this.state.totalRevenue}</h2>                
+                <h2>${this.state.totalRevenue}</h2>   
+                <button onClick={() => {this.fetchSalesData('milk')}}>DISPLAY Milk Sales</button>
+                {this.state.whole&&<div>
+                    whole {this.state.whole.total}
+                    oat {this.state.oat.total}
+                    almond {this.state.almond.total}
+                </div>}
             </div>
         );
     }

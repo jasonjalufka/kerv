@@ -38,30 +38,36 @@ exports.getTotal = (req, res) => {
         })
 }
 
-exports.getDrinksSold = (req, res) => {
-    console.log('got inside getDrinksSold');
+exports.getSalesByType = (req, res) => {
+    let field = req.params.type;
+    let collection = ''
+    if(field == 'drink')
+        collection = 'drinks'
+    else 
+        collection = 'inventories'
+
     OrderItem.aggregate(
         [
             {$lookup: {
-                from: 'drinks',
-                localField: 'drink',
+                from: collection,
+                localField: field,
                 foreignField: '_id',
-                as: 'drink'
+                as: field
             }},
             {$unwind: {
-                path: '$drink'
+                path: '$'+field
             }},
             { $group: { 
-                _id: '$drink.name',
+                _id: '$'+field+'.name',
                 count: {$sum: 1},
-                total: {$sum:'$drink.price'}
+                total: {$sum:'$'+field+'.price'}
             }}
         ],
         function(err,results) {
             if (err) throw err;
             let response = {}
-            results.map(drink =>{
-                response[drink._id] = {'count': drink.count, 'total': drink.total}
+            results.map(type =>{
+                response[type._id] = {'count': type.count, 'total': type.total}
             })
             res.send(response);
         }
