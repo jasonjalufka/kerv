@@ -29,7 +29,6 @@ exports.getTotal = (req, res) => {
         .then(orderItem => {
             total = 0;
             orderItem.map((orderItemEntry, index) => {
-                console.log('Entry: ', index, 'OrderItemEntry: ', orderItemEntry);
                 total = total + parseFloat(orderItemEntry.total);
             })
             res.send({'totalRevenue': total});
@@ -37,6 +36,36 @@ exports.getTotal = (req, res) => {
         .catch(err => {
             console.log('ERROR READING DOCUMENTS FROM ORDER', err)
         })
+}
+
+exports.getDrinksSold = (req, res) => {
+    console.log('got inside getDrinksSold');
+    OrderItem.aggregate(
+        [
+            {$lookup: {
+                from: 'drinks',
+                localField: 'drink',
+                foreignField: '_id',
+                as: 'drink'
+            }},
+            {$unwind: {
+                path: '$drink'
+            }},
+            { $group: { 
+                _id: '$drink.name',
+                count: {$sum: 1},
+                total: {$sum:'$drink.price'}
+            }}
+        ],
+        function(err,results) {
+            if (err) throw err;
+            let response = {}
+            results.map(drink =>{
+                response[drink._id] = {'count': drink.count, 'total': drink.total}
+            })
+            res.send(response);
+        }
+    )
 }
 
 let populateOrderItemDoc = (orderItem) => {

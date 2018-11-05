@@ -8,7 +8,7 @@ class Sales extends Component {
     constructor(props){
         super(props);
         this.state = {
-            totalRevenue: 'before'
+            totalRevenue: 'before',
         };
     }
     componentDidMount() {
@@ -17,16 +17,28 @@ class Sales extends Component {
 
     fetchSalesData = (subRoute) => {
         let filter = (subRoute ? subRoute : DEFAULT_QUERY)
+        console.log(API + filter);
         fetch(API + filter)
         .then(response => response.json())
-        .then(data => this.setState(data))
+        .then(data => {
+            this.setState(data)
+            this.setState({showDrinkData: true})
+            console.log(this.state);
+        })
         .catch(err => console.log('ERROR: ', err));
     }
     render() {
         return (
             <div>
                 <h1>Welcome to Sales</h1>
-                <button onClick={() => {this.fetchSalesData('drink')}}>DISPLAY DRINK</button>
+                <button onClick={() => {this.fetchSalesData('drinks')}}>DISPLAY DRINK</button>
+                {this.state.latte&&<div>
+                    espresso {this.state.espresso.total}
+                    cortado {this.state.cortado.total}
+                    macchiato {this.state.macchiato.total}
+                    cappuccino {this.state.cappuccino.total}
+                    latte {this.state.latte.total}
+                </div>}
                 <h2>${this.state.totalRevenue}</h2>                
             </div>
         );
