@@ -39,3 +39,23 @@ exports.get = (req, res) => {
             console.log('ERROR READING DOCUMENTS FROM ORDER', err);
         })
 }
+
+exports.getSalesDates = (req, res) => {
+    Order.aggregate(
+        [
+            { $group: { 
+                _id: {$month: '$date'},
+                count: {$sum: 1},
+                total: {$sum:'$totalCost'}
+            }}
+        ],
+        function(err,results) {
+            if (err) throw err;
+            let response = {}
+            results.map(month => {
+                response[month._id] = {'salesCount': month.count, 'totalRevnue': month.total}
+            })
+            res.send(response);
+        }
+    )
+}
