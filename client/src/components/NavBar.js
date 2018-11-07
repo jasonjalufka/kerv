@@ -1,10 +1,11 @@
 import React from 'react';
+
+import { Tab, Tabs, AppBar } from '@material-ui/core';
+import { Route, Redirect, Link } from "react-router-dom";
+import { withStyles } from '@material-ui/core/styles';
 import Menu from '../containers/Menu/Menu';
 import Sales from '../containers/Sales/Sales';
 import KervConfig from '../containers/Kerv/KervConfig';
-import { Tab, Tabs, AppBar } from '@material-ui/core';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
     appBar: {
@@ -14,10 +15,12 @@ const styles = theme => ({
 })
 
 let NavBar = props => {
-    const { classes } = props
-
-    return (
-        < Router >
+    const { classes, barista} = props
+    if(!barista){
+        return <Redirect to='/login' />
+    }
+    else {
+        return ( 
             <div>
                 <AppBar position="static" className={classes.appBar}>
                     <Tabs value={0} fullWidth>
@@ -29,9 +32,10 @@ let NavBar = props => {
                 <Route exact path="/" component={Menu} />
                 <Route path="/sales" component={Sales} />
                 <Route path="/config" component={KervConfig} />
-            </div>
-        </Router >
-    )
+                {barista&&<Redirect to='/' />}
+        </div>        
+        )
+    }
 }
 
 export default withStyles(styles)(NavBar);

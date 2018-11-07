@@ -10,6 +10,9 @@ export const ADD_SALE_FAILURE = "ADD_SALE_FAILURE";
 export const GET_SALES_REQUEST = "GET_SALE_REQUEST";
 export const GET_SALES_SUCCESS = "GET_SALE_SUCCESS";
 export const GET_SALES_FAILURE = "GET_SALE_SUCCESS";
+export const GET_LOGIN_REQUEST = "GET_LOGIN_REQUEST";
+export const GET_LOGIN_SUCCESS = "GET_LOGIN_SUCCESS";
+export const GET_LOGIN_FAILURE = "GET_LOGIN_FAILURE";
 
 
 export const getKervData = () => ({
@@ -29,4 +32,13 @@ export const addSale = (payload) =>({
     body: JSON.stringify(payload)
   }
 })
-  
+
+export const getLogin = (payload) => ({
+  [CALL_API]: {
+    endpoint: '/api/login/',
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    types: [GET_LOGIN_REQUEST,GET_LOGIN_SUCCESS,GET_LOGIN_FAILURE],
+    body: JSON.stringify(payload)
+  }
+})  
