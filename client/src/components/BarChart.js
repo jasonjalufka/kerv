@@ -37,7 +37,7 @@ const BarChart = props => {
             />
             <VictoryBar
                 labelComponent={<VictoryTooltip />}
-                style={{ data: { fill: "#29f1c3" } }}
+                style={{ data: { fill: "#84DCC6" } }}
                 data={props.barChartData}
                 x="month"
                 y="totalRevenue"
