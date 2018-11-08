@@ -8,6 +8,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADD_ORDER_ITEM:
+        console.log('new order received');
             let newState = {
                 ...state,
                 [state.orderCount]: action.order,

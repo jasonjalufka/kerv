@@ -109,68 +109,72 @@ class Sales extends Component {
                 console.log('State', this.state);
             });
     }
+    if(!this.props.kerv.barista)
+            this.props.history.push('/login')
+        else this.fetchSalesData(DEFAULT_QUERY)
+      }
 
-    fetchSalesData = (subRoute) => {
-        let filter = (subRoute ? subRoute : DEFAULT_QUERY)
-        let dataArr = []
-        console.log(API + filter);
-        fetch(API + filter)
-            .then(response => response.json())
-            .then(data => {
-                Object.keys(data).map(month => {
-                    dataArr.push({ x: month, y: data[month].totalRevnue })
-                });
-                this.setState({
-                    ...this.state,
-                    graphData: dataArr
-                });
-                console.log('State: ', this.state);
-            })
-            .catch(err => console.log('ERROR: ', err));
-    }
-    render() {
-        return (
-            <Card>
-                <div className="button-container" style={{ padding: "15px" }}>
-                    <Grid
-                        container
-                        direction="row"
-                        justify="center"
-                        alignItems="flex-start">
-                        <Grid item xs>
-                            <Button variant="contained" color="primary" onClick={() => { this.fetchSalesData('by/drink') }}>Display Drink Sales</Button>
-                        </Grid>
-                        <Grid item xs>
-                            <Button variant="contained" color="primary" onClick={() => { this.fetchSalesData('by/milk') }}>Display Milk Sales</Button>
-                        </Grid>
-                        <Grid item xs>
-                            <Button variant="contained" color="primary" onClick={() => { this.fetchSalesByMonth() }}>Display Sales by Dates</Button>
-                        </Grid>
-                    </Grid>
-                </div>
+fetchSalesData = (subRoute) => {
+    let filter = (subRoute ? subRoute : DEFAULT_QUERY)
+    let dataArr = []
+    console.log(API + filter);
+    fetch(API + filter)
+        .then(response => response.json())
+        .then(data => {
+            Object.keys(data).map(month => {
+                dataArr.push({ x: month, y: data[month].totalRevnue })
+            });
+            this.setState({
+                ...this.state,
+                graphData: dataArr
+            });
+            console.log('State: ', this.state);
+        })
+        .catch(err => console.log('ERROR: ', err));
+}
+render() {
+    return (
+        <Card>
+            <div className="button-container" style={{ padding: "15px" }}>
                 <Grid
                     container
                     direction="row"
-                    justify="space-around"
-                    alignItems="center">
-                    <Grid item xl>
-                        <Paper><h2 style={{ padding: '10px' }}>{this.state.isLoading ? 'Total Revenue: $...' : 'Total Revenue: $' + parseFloat(this.state.totalRevenue).toFixed(2)}</h2></Paper>
+                    justify="center"
+                    alignItems="flex-start">
+                    <Grid item xs>
+                        <Button variant="contained" color="primary" onClick={() => { this.fetchSalesData('by/drink') }}>Display Drink Sales</Button>
                     </Grid>
-                    <Grid item xl>
-                        <Paper><BarChart barChartData={this.state.barChartData} /></Paper>
+                    <Grid item xs>
+                        <Button variant="contained" color="primary" onClick={() => { this.fetchSalesData('by/milk') }}>Display Milk Sales</Button>
                     </Grid>
-                    <Grid item xl>
-                        <PieChart pieChartData={this.state.pieChartData} />
+                    <Grid item xs>
+                        <Button variant="contained" color="primary" onClick={() => { this.fetchSalesByMonth() }}>Display Sales by Dates</Button>
                     </Grid>
                 </Grid>
-            </Card >
-        )
-    }
+            </div>
+            <Grid
+                container
+                direction="row"
+                justify="space-around"
+                alignItems="center">
+                <Grid item xl>
+                    <Paper><h2 style={{ padding: '10px' }}>{this.state.isLoading ? 'Total Revenue: $...' : 'Total Revenue: $' + parseFloat(this.state.totalRevenue).toFixed(2)}</h2></Paper>
+                </Grid>
+                <Grid item xl>
+                    <Paper><BarChart barChartData={this.state.barChartData} /></Paper>
+                </Grid>
+                <Grid item xl>
+                    <PieChart pieChartData={this.state.pieChartData} />
+                </Grid>
+            </Grid>
+        </Card >
+    )
+}
 }
 
 const mapStateToProps = state => {
     return {
-        sales: state.sales
+        kerv: state.kerv
     }
 }
 

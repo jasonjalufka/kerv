@@ -2,6 +2,7 @@
 import * as actionTypes from '../actions';
 
 const initialState = {
+    showApp: false,
     milk: {},
     bean: {},
     drink: {}
@@ -9,7 +10,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.GET_DATA_SUCCESS:
+        case actionTypes.GET_LOGIN_SUCCESS:
             let newState = { ...state };
             Object.keys(action.payload.kerv).map((type, index) => {
                 let typeObject = {}
@@ -20,6 +21,7 @@ const reducer = (state = initialState, action) => {
                 newState[type] = typeObject;
                 return null;
             })
+            newState.barista = action.payload.user;
             return newState;
         case actionTypes.ADD_ORDER_ITEM:
             let newStateInv = { ...state };
@@ -28,6 +30,11 @@ const reducer = (state = initialState, action) => {
                 newStateInv.milk[action.order.milkOption].amount = state.milk[action.order.milkOption].amount - state.drink[action.order.drinkOption].milkReq;
             }
             return newStateInv;
+        case actionTypes.GET_LOGIN_REQUEST:
+            return state;
+        case actionTypes.GET_LOGIN_FAILURE:
+            console.log('error, wrong user name or password')
+            return {ERROR: 'WRONG USERNAME OR PASSWORD'}
         default:
             return state;
     }

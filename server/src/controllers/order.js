@@ -1,12 +1,14 @@
 Order = require('../models/order');
 OrderItem = require('../controllers/orderItem');
+Barista = require('../models/barista');
+
 const mongoose = require('mongoose');
 
 exports.post = (req, res) => {
     let orderDoc = new Order()
     orderDoc.subtotal = req.body.order.orderTotal;
-    orderDoc.tip = 0;
-    orderDoc.date = new Date();
+    orderDoc.tip = req.body.order.tip;
+    orderDoc.date = new Date("2018-08-25");
     orderDoc.totalCost = orderDoc.subtotal + orderDoc.tip;
 
     OrderItem.post(req.body.order)
@@ -17,7 +19,15 @@ exports.post = (req, res) => {
             // //save or insert here
             orderDoc.save()
                 .then(doc => {
-                    res.sendStatus(201);
+                    Barista.findOneAndUpdate({name: req.body.order.barista},{$push: {orders: doc}}, {new: true})
+                    .then(baristaUpdate => {
+                        console.log('Added this order to ', baristaUpdate.name, 'Data: ', baristaUpdate);
+                        res.sendStatus(201)
+                    })
+                    .catch(err => {
+                        console.log('error adding order to barista: ', req.body.order.barista, 'ERROR: ', err)
+                        res.sendStatus(201);
+                    })
                 })
                 .catch(err => {
                     res.sendStatus(500);
