@@ -23,7 +23,7 @@ const styles = theme => ({
 });
 
 let MenuForm = (props) => {
-    const { classes, onOpenModal, hasDrinkOption, hasBeanOption, hasMilkOption, handleSubmit } = props;
+    const { classes, hasDrinkOption, hasBeanOption, hasMilkOption, handleSubmit } = props;
 
     const submitForm = (formValues) => {
         props.onSubmit(formValues);
@@ -40,7 +40,6 @@ let MenuForm = (props) => {
                             {
                                 Object.keys(props.kerv.drink).map((drink, index) => (
                                     <ListItem button selected={hasDrinkOption === drink} key={index} onClick={() => {
-                                        onOpenModal()
                                         props.change("drinkOption", drink);
                                         props.change("milkOption", null);
                                     }}>

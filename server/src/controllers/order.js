@@ -1,5 +1,7 @@
 Order = require('../models/order');
 OrderItem = require('../controllers/orderItem');
+Barista = require('../models/barista');
+
 const mongoose = require('mongoose');
 
 exports.post = (req, res) => {
@@ -17,7 +19,15 @@ exports.post = (req, res) => {
             // //save or insert here
             orderDoc.save()
                 .then(doc => {
-                    res.sendStatus(201);
+                    Barista.findOneAndUpdate({name: req.body.order.barista},{$push: {orders: doc}}, {new: true})
+                    .then(baristaUpdate => {
+                        console.log('Added this order to ', baristaUpdate.name, 'Data: ', baristaUpdate);
+                        res.sendStatus(201)
+                    })
+                    .catch(err => {
+                        console.log('error adding order to barista: ', req.body.order.barista, 'ERROR: ', err)
+                        res.sendStatus(201);
+                    })
                 })
                 .catch(err => {
                     res.sendStatus(500);
