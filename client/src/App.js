@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { getLogin } from './store/actions';
+
 import LoginForm from './components/LoginForm';
 import NavBar from './components/NavBar';
 import './App.css';
@@ -15,7 +16,8 @@ class App extends Component {
   render() {
       return (
         <div className="App">
-            <h1>K E R V</h1>
+            
+            {/* <Divider /> */}
             <Router>
               <div>
                 <NavBar barista={this.props.kerv.barista} />

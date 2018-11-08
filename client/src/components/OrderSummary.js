@@ -20,7 +20,8 @@ const OrderSummary = (props) => {
     
     let orderCountIndex = Object.keys(order).length - 1;
     return (
-        <Card style={{ position: 'relative', height: '400px' }}>
+        <Card style={{ position: 'relative', height: '100%' }}>
+            <h3>Current Order</h3>
             {order[0]&&<List>
             {
                 Object.keys(order).map((orderKey, index) => (

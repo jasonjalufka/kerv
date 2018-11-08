@@ -4,7 +4,7 @@ import * as actionTypes from "../../store/actions";
 import MenuForm from '../../components/MenuForm';
 import OrderSummary from '../../components/OrderSummary';
 import {addSale} from '../../store/actions'
-import Grid from '@material-ui/core/Grid';
+import {Grid, Card} from '@material-ui/core';
 
 class Menu extends Component {
   state = {
@@ -42,13 +42,11 @@ class Menu extends Component {
 
   render() {
     return (
-      <Grid container spacing={16} justify='space-evenly' >
+      <Grid style={{paddingTop: 60, height: '100%'}}container spacing={0} justify='center' >
         <Grid item xs={8}>
-          <h3>Menu</h3>
           <MenuForm kerv={ this.props.kerv } onSubmit={this.handleAddToOrder} />
         </Grid>
         <Grid item xs={3}>
-          <h3>Current Order</h3>
             <OrderSummary addTip = {this.handleAddTip} hasTip={this.state.tip} milk={this.props.kerv.milk}
                           order={this.props.order} placeOrder={this.handlePlaceOrder}/> 
         </Grid>

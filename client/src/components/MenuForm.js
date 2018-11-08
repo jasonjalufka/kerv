@@ -1,8 +1,8 @@
 import React from 'react';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux'
-import {List, ListSubheader, Card, Grid, ListItem, ListItemText, withStyles, Button} from '@material-ui/core/';
-
+import { List, IconButton, ListSubheader, Grid, ListItem, ListItemText, withStyles, Button, Card} from '@material-ui/core/';
+import { ChevronRight } from '@material-ui/icons';
 const styles = theme => ({
     textRight: {
         textAlign: 'right',
@@ -32,62 +32,64 @@ let MenuForm = (props) => {
 
     return (
         <form onSubmit={handleSubmit(submitForm)}>
-            <Grid container spacing={0}>
+        <Grid container alignItems="center" style={{marginRight:0}}>
+        <Grid item xs={11}>
+        <Card>
+        <h3>Menu</h3>
+            <Grid container spacing={0} >
                 <Grid item xs={4} >  
-                    <Card style={{ height: '400px' }}>
-                        <List subheader={<ListSubheader component="div">Drink</ListSubheader>}>
-                            <List >
-                            {
-                                Object.keys(props.kerv.drink).map((drink, index) => (
-                                    <ListItem button selected={hasDrinkOption === drink} key={index} onClick={() => {
-                                        props.change("drinkOption", drink);
-                                        props.change("milkOption", null);
-                                    }}>
-                                        <Field style={{visibility: 'hidden' }} name="drinkOption" component="input" type="radio" value={drink} />
-                                        <ListItemText primary={drink} secondary={'$' + props.kerv.drink[drink].price} />
-                                    </ ListItem>
-                                ))
-                            }
-                            </List>
-                        </List>
-                    </Card>
+                    <List subheader={<ListSubheader component="div">Drink</ListSubheader>}>
+                        {
+                            Object.keys(props.kerv.drink).map((drink, index) => (
+                                <ListItem button selected={hasDrinkOption === drink} key={index} onClick={() => {
+                                    props.change("drinkOption", drink);
+                                    props.change("milkOption", null);
+                                }}>
+                                    <Field style={{visibility: 'hidden' }} name="drinkOption" component="input" type="radio" value={drink} />
+                                    <ListItemText primary={drink} secondary={'$' + props.kerv.drink[drink].price} />
+                                </ ListItem>
+                            ))
+                        }
+                    </List>
                 </Grid>
                 <Grid item xs={4} >
-                    <Card  style={{ height: '400px' }}>
-                        <List subheader={<ListSubheader component="div">Beans</ListSubheader>}>
-                            {
-                                Object.keys(props.kerv.bean).map((bean, index) => (
-                                    <ListItem disabled={(hasDrinkOption? false : true)} className={classes.list} button selected={hasBeanOption === bean} key={index} onClick={() => {
-                                        props.change("beanOption", bean);
-                                    }}>
-                                        <Field style={{visibility: 'hidden' }} name="beanOption" component="input" type="radio" value={bean} />
-                                        <ListItemText className={classes.textLeft} primary={bean} />
-                                    </ ListItem>
-                                ))
-                            }
-                        </List>
-                    </Card>
+                    <List subheader={<ListSubheader component="div">Beans</ListSubheader>}>
+                        {
+                            Object.keys(props.kerv.bean).map((bean, index) => (
+                                <ListItem  style={{paddingBottom: 31}} disabled={(hasDrinkOption? false : true)} className={classes.list} button selected={hasBeanOption === bean} key={index} onClick={() => {
+                                    props.change("beanOption", bean);
+                                }}>
+                                    <Field style={{visibility: 'hidden' }} name="beanOption" component="input" type="radio" value={bean} />
+                                    <ListItemText primary={bean} />
+                                </ ListItem>
+                            ))
+                        }
+                    </List>
                 </Grid>
                                 
                 <Grid item xs={4} > 
-                    <Card  style={{ height: '400px'}}>
-                        <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
-                            {
-                                Object.keys(props.kerv.milk).map((milk, index) => (
-                                    <ListItem disabled={((hasBeanOption&&hasDrinkOption)&&(hasDrinkOption !== 'espresso') ? false : true)} className={classes.list} button selected={hasMilkOption === milk} key={index} onClick={() => {
-                                        props.change("milkOption", milk);
-                                    }}>
-                                        <Field style={{visibility: 'hidden' }} name="milkOption" component="input" type="radio" value={milk} />
-                                        <ListItemText className={classes.textLeft} primary={milk} />
-                                        <ListItemText className={classes.textRight}primary={props.kerv.milk[milk].price ? ' $' + props.kerv.milk[milk].price.toFixed(2) : ''}></ListItemText>
-                                    </ ListItem>
-                                ))
-                            }
-                        </List>
-                    </Card>
+                    <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
+                        {
+                            Object.keys(props.kerv.milk).map((milk, index) => (
+                                <ListItem disabled={((hasBeanOption&&hasDrinkOption)&&(hasDrinkOption !== 'espresso') ? false : true)} className={classes.list} button selected={hasMilkOption === milk} key={index} onClick={() => {
+                                    props.change("milkOption", milk);
+                                }}>
+                                    <Field style={{visibility: 'hidden' }} name="milkOption" component="input" type="radio" value={milk} />
+                                    <ListItemText primary={milk} secondary={props.kerv.milk[milk].price ? ' $' + props.kerv.milk[milk].price.toFixed(2) : ''}></ListItemText>
+                                </ ListItem>
+                            ))
+                        }
+                    </List>
                 </Grid> 
             </Grid>
-            <Button type="submit" variant="contained" color="primary" disabled={!(((hasDrinkOption !== 'espresso') && hasBeanOption && hasMilkOption) || (hasDrinkOption === 'espresso' && hasBeanOption))}>Add to Order</Button>
+        </Card>
+        </Grid>
+        <Grid item xs={1} >
+            <IconButton type="submit"   disabled={!(((hasDrinkOption !== 'espresso') && hasBeanOption && hasMilkOption) || (hasDrinkOption === 'espresso' && hasBeanOption))}>
+                <ChevronRight fontSize="large"/>
+            </IconButton>
+        </Grid>
+        </Grid>
         </form>
     );
 };
