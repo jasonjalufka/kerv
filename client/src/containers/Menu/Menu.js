@@ -10,6 +10,9 @@ class Menu extends Component {
   state = {
     tip: 0
   }
+  componentWillReceiveProps(nextProps) {
+    this.setState({ tip: 0});
+}
   componentDidMount(){
     if(!this.props.kerv.barista){
       this.props.history.push('/login')
@@ -19,16 +22,15 @@ class Menu extends Component {
     this.setState({tip: tipAmount});
   }
   
-  //Resets order state to 0 to be used for the next order
-  handlePlaceOrder = (order,tip) => {
+  handlePlaceOrder = (order, tip) => {
     order["tip"] = tip
     order["barista"] = this.props.kerv.barista
     this.props.onAddSale({order, "inventory" : { "milk" : this.props.kerv.milk, 
                           "bean":this.props.kerv.bean}});
+
   }
 
   handleAddToOrder = order => {
-    this.setState({tip: 0})
     let itemCost = 0;
     itemCost = this.props.kerv.drink[order.drinkOption].price;
     if (order.milkOption)
@@ -57,7 +59,6 @@ class Menu extends Component {
 
 const mapStateToProps = state => {
   return {
-    sales: state.sales,
     kerv: state.kerv,
     order: state.order
   };

@@ -19,10 +19,9 @@ const OrderSummary = (props) => {
     const { hasTip, addTip, classes, order } = props;
     
     let orderCountIndex = Object.keys(order).length - 1;
-
     return (
         <Card style={{ position: 'relative', height: '400px' }}>
-            <List>
+            {order[0]&&<List>
             {
                 Object.keys(order).map((orderKey, index) => (
                     <div key={index}>
@@ -36,22 +35,22 @@ const OrderSummary = (props) => {
                     </div>
                 ))
             }
-            </List>
+            </List>}
             
             <div style={{position: 'absolute', bottom: 0, width: '100%'}}>
                 <List>
                     <ListItem>
                         <ListItemText className={classes.textLeft} primary={'Tip'} />
-                        <ListItemText className={classes.textRight} primary={'$'+hasTip}/>
+                        <ListItemText className={classes.textRight} primary={'$'+ hasTip}/>
                     </ListItem>
                     <Divider />
                 </List>
                 <List subheader={<ListSubheader component="div">Tip</ListSubheader>} style={{display: 'flex',flexDirection: 'row'}}>
-                    <ListItem button onClick={() => addTip(0)}selected={hasTip === 0}><ListItemText className={classes.textLeft} primary={'$0'} /></ListItem>
-                    <ListItem button onClick={() => addTip(1)}selected={hasTip === 1}><ListItemText className={classes.textLeft} primary={"$1"} /></ListItem>
-                    <ListItem button onClick={()=> addTip(2)} selected={hasTip === 2}><ListItemText className={classes.textLeft} primary={"$2"} /></ListItem>
+                    <ListItem disabled={props.order[0]? false: true} button onClick={() => addTip(0)}selected={hasTip === 0}><ListItemText className={classes.textLeft} primary={'$0'} /></ListItem>
+                    <ListItem disabled={props.order[0]? false: true} button onClick={() => addTip(1)}selected={hasTip === 1}><ListItemText className={classes.textLeft} primary={"$1"} /></ListItem>
+                    <ListItem disabled={props.order[0]? false: true} button onClick={()=> addTip(2)} selected={hasTip === 2}><ListItemText className={classes.textLeft} primary={"$2"} /></ListItem>
                 </List>
-                <Button className={classes.button}variant="contained"
+                <Button disabled={props.order[0]? false: true}className={classes.button}variant="contained"
                     color="primary"
                     onClick={() => props.placeOrder(order, hasTip)}>Charge ${props.order.orderTotal + hasTip}
                 </Button>

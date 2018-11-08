@@ -32,7 +32,7 @@ let MenuForm = (props) => {
 
     return (
         <form onSubmit={handleSubmit(submitForm)}>
-            <Grid container spacing={4}>
+            <Grid container spacing={0}>
                 <Grid item xs={4} >  
                     <Card style={{ height: '400px' }}>
                         <List subheader={<ListSubheader component="div">Drink</ListSubheader>}>

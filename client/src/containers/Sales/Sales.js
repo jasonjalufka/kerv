@@ -57,7 +57,6 @@ class Sales extends Component {
 
 const mapStateToProps = state => {
     return {
-        sales: state.sales,
         kerv: state.kerv
     }
 }
