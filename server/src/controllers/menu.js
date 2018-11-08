@@ -8,7 +8,7 @@ exports.get = (req, res) => {
 		Inventory.get().then(inventory =>{
 			kerv['milk'] = inventory.milk;
 			kerv['bean'] = inventory.bean;
-			res.send({'kerv': kerv});
+			res.send({'kerv': kerv, 'user': req.body.user});
 		});
 	});
 };

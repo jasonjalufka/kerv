@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
-import './App.css';
-import NavBar from './components/NavBar';
-import { getKervData, getLogin } from './store/actions';
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import { connect } from "react-redux";
+import { getLogin } from './store/actions';
 import LoginForm from './components/LoginForm';
+import NavBar from './components/NavBar';
+import './App.css';
 
 class App extends Component {
   
@@ -16,19 +16,16 @@ class App extends Component {
       return (
         <div className="App">
             <h1>K E R V</h1>
-
             <Router>
               <div>
-                <NavBar barista={this.props.kerv.barista} showApp={this.props.kerv.showApp}/>
-                <Route path="/login" render={(props) => <LoginForm {...props} onSubmit={this.handleSubmit}/>} />
+                <NavBar barista={this.props.kerv.barista} />
+                <Route path="/login" render={(props) => <LoginForm {...props} barista={this.props.kerv.barista} onSubmit={this.handleSubmit}/>} />
               </div>
             </Router>
-            
           </div>
       );
     }
   }
-
 
 const mapStateToProps = state => {
   return {
@@ -38,7 +35,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onGetKervData: () => dispatch(getKervData()),
     onAttemptLogin: (user) => dispatch(getLogin(user))
   };
 };

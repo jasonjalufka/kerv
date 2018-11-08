@@ -8,21 +8,17 @@ import Grid from '@material-ui/core/Grid';
 
 class Menu extends Component {
   state = {
-    openModal: false,
     tip: 0
   }
-
+  componentDidMount(){
+    if(!this.props.kerv.barista){
+      this.props.history.push('/login')
+    }
+  }
   handleAddTip = (tipAmount) => {
     this.setState({tip: tipAmount});
   }
-  handleOpen = () => {
-    this.setState({ openModal: true });
-  };
-
-  handleClose = () => {
-    this.setState({ openModal: false });
-  };
-
+  
   //Resets order state to 0 to be used for the next order
   handlePlaceOrder = (order,tip) => {
     order["tip"] = tip
@@ -40,28 +36,21 @@ class Menu extends Component {
         itemCost += this.props.kerv.milk[order.milkOption].price;
     order.total = itemCost;
     this.props.onAddToOrder(order);
-    this.handleClose();
   }
 
   render() {
-    console.log('kerv state in menu', this.props.kerv)
     return (
-      <Grid container spacing ={24}>
-      <Grid item xs={6}>
-        <h3>Menu</h3><MenuForm 
-        openModal={this.state.openModal} onCloseModal={this.handleClose} onOpenModal={this.handleOpen} kerv={ this.props.kerv } onSubmit={this.handleAddToOrder} />
-        
+      <Grid container spacing={16} justify='space-evenly' >
+        <Grid item xs={8}>
+          <h3>Menu</h3>
+          <MenuForm kerv={ this.props.kerv } onSubmit={this.handleAddToOrder} />
         </Grid>
-        <Grid item xs={4}>
-        <h3>Current Order</h3>
-
-          {
-            this.props.order[0] && <div>
-              <OrderSummary addTip = {this.handleAddTip} hasTip={this.state.tip} milk={this.props.kerv.milk}order={this.props.order} placeOrder={this.handlePlaceOrder}/>
-            </div>
-          }
+        <Grid item xs={3}>
+          <h3>Current Order</h3>
+            <OrderSummary addTip = {this.handleAddTip} hasTip={this.state.tip} milk={this.props.kerv.milk}
+                          order={this.props.order} placeOrder={this.handlePlaceOrder}/> 
         </Grid>
-      </Grid>
+      </Grid> 
     );
   }
 }

@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 exports.post = (req, res) => {
     let orderDoc = new Order()
     orderDoc.subtotal = req.body.order.orderTotal;
-    orderDoc.tip = 0;
-    orderDoc.date = new Date();
+    orderDoc.tip = req.body.order.tip;
+    orderDoc.date = new Date("2018-08-25");
     orderDoc.totalCost = orderDoc.subtotal + orderDoc.tip;
 
     OrderItem.post(req.body.order)

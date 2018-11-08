@@ -1,8 +1,7 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import TextField from '@material-ui/core/TextField';
+import { Redirect } from "react-router-dom";
+import {Button, Card, TextField} from '@material-ui/core';
 
 let LoginForm = (props) => {
     const { handleSubmit } = props;
@@ -17,8 +16,9 @@ let LoginForm = (props) => {
         label,
         ...custom
       }) => <TextField label={label} type={input.type} {...input} {...custom}/>
-    
-    return (
+
+      if(props.barista) return <Redirect to="/" />
+      return (
         <div>
             <Card>
                 <form onSubmit={handleSubmit(submitForm)}>

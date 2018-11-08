@@ -12,7 +12,9 @@ class Sales extends Component {
         };
     }
     componentDidMount() {
-        this.fetchSalesData(DEFAULT_QUERY)
+        if(!this.props.kerv.barista)
+            this.props.history.push('/login')
+        else this.fetchSalesData(DEFAULT_QUERY)
       }
 
     fetchSalesData = (subRoute) => {
@@ -55,7 +57,8 @@ class Sales extends Component {
 
 const mapStateToProps = state => {
     return {
-        sales: state.sales
+        sales: state.sales,
+        kerv: state.kerv
     }
 }
 

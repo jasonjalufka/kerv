@@ -11,7 +11,6 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.GET_LOGIN_SUCCESS:
-            console.log('recieved data', action.payload.kerv);
             let newState = { ...state };
             Object.keys(action.payload.kerv).map((type, index) => {
                 let typeObject = {}
@@ -32,7 +31,6 @@ const reducer = (state = initialState, action) => {
             }
             return newStateInv;
         case actionTypes.GET_LOGIN_REQUEST:
-            console.log('trying to login');
             return state;
         case actionTypes.GET_LOGIN_FAILURE:
             console.log('error, wrong user name or password')
