@@ -134,7 +134,7 @@ class Sales extends Component {
                     justify="space-around"
                     alignItems="center">
                     <Grid item xs={4} alignItems="stretch">
-                        <h2 style={{ padding: '10px' }}>{this.state.isLoading ? 'Total Revenue: $...' : 'Total Revenue: $' + parseFloat(this.state.totalRevenue).toFixed(2)}</h2>
+                        <h2 style={{ padding: '10px', fontWeight: '100', fontSize: '2em' }}>{this.state.isLoading ? 'Total Revenue: $...' : 'Total Revenue: $' + parseFloat(this.state.totalRevenue).toFixed(2)}</h2>
                     </Grid>
                     <Grid item xs={4} alignItems="stretch">
                         <BarChart barChartData={this.state.barChartData} />

@@ -9,12 +9,6 @@ const PieChart = props => {
     console.log('props: ', props.pieChartData);
     return (
         <div>
-            {/* <VictoryLegend
-                // x={125} y={10}
-                orientation="horizontal"
-                gutter={20}
-                colorScale={["#222222", "#E8E8E8", "#4B4E6D", "#84DCC6", "#95A3B3"]}
-                data={legendName} /> */}
             <VictoryPie
                 labelRadius={80}
                 innerRadius={100}
