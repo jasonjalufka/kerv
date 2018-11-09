@@ -1,6 +1,7 @@
 import { CALL_API } from 'redux-api-middleware';
 
 export const ADD_ORDER_ITEM = 'ADD_ORDER_ITEM';
+export const REMOVE_ORDER_ITEM = 'REMOVE_ORDER_ITEM';
 
 export const ADD_SALE_REQUEST = "ADD_SALE_REQUEST";
 export const ADD_SALE_SUCCESS = "ADD_SALE_SUCCESS";

@@ -4,12 +4,23 @@ import * as actionTypes from "../../store/actions";
 import MenuForm from '../../components/MenuForm';
 import OrderSummary from '../../components/OrderSummary';
 import {addSale} from '../../store/actions'
-import {Grid, Card} from '@material-ui/core';
+import {Grid} from '@material-ui/core';
 
 class Menu extends Component {
   state = {
-    tip: 0
+    tip: 0,
+    isHovering: false,
+    hoverOver: null
   }
+  handleRemove = (orderKey) => {
+    this.props.onRemoveOrder(orderKey);
+  }
+  handleMouseHover = (index) => {
+    ((index !== this.state.hoverOver) ? 
+      this.setState({isHovering: true, hoverOver: index})
+      : this.setState({isHovering: !this.state.isHovering,hoverOver:index}))
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({ tip: 0});
 }
@@ -47,7 +58,7 @@ class Menu extends Component {
           <MenuForm kerv={ this.props.kerv } onSubmit={this.handleAddToOrder} />
         </Grid>
         <Grid item xs={3}>
-            <OrderSummary addTip = {this.handleAddTip} hasTip={this.state.tip} milk={this.props.kerv.milk}
+            <OrderSummary hoverOver={this.state.hoverOver} remove={this.handleRemove} handleHover={this.handleMouseHover} hovering={this.state.isHovering} addTip = {this.handleAddTip} hasTip={this.state.tip} milk={this.props.kerv.milk}
                           order={this.props.order} placeOrder={this.handlePlaceOrder}/> 
         </Grid>
       </Grid> 
@@ -67,7 +78,10 @@ const mapDispatchToProps = dispatch => {
     onAddToOrder: order => {
       dispatch({ type: actionTypes.ADD_ORDER_ITEM, order: order });
     },
-    onAddSale: (order) => dispatch(addSale(order))
+    onAddSale: (order) => dispatch(addSale(order)),
+    onRemoveOrder: orderKey => {
+      dispatch({type: actionTypes.REMOVE_ORDER_ITEM, orderKey: orderKey})
+    }
   };
 };
 

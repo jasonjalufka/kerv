@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux'
-import { List, IconButton, ListSubheader, Grid, ListItem, ListItemText, withStyles, Button, Card} from '@material-ui/core/';
+import { List, IconButton, ListSubheader, Grid, ListItem, ListItemText, withStyles, Card} from '@material-ui/core/';
 import { ChevronRight } from '@material-ui/icons';
 const styles = theme => ({
     textRight: {

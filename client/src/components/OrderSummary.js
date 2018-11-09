@@ -1,5 +1,7 @@
 import React from 'react';
 import {List, ListSubheader, Card, Divider, withStyles, ListItem, ListItemText, Button} from '@material-ui/core/';
+import { Remove } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
     button: {
@@ -25,12 +27,13 @@ const OrderSummary = (props) => {
             {order[0]&&<List>
             {
                 Object.keys(order).map((orderKey, index) => (
-                    <div key={index}>
+                    <div key={index} onMouseEnter={() => props.handleHover(index)} onMouseLeave={() => props.handleHover(index)}>
                         {
-                            (index !== orderCountIndex) && (index !== orderCountIndex - 1) && <ListItem>
+                            (index !== orderCountIndex) && (index !== orderCountIndex - 1) && <ListItem >
                                 <ListItemText className={classes.textLeft} primary={order[orderKey].drinkOption} 
                                     secondary={( order[orderKey].milkOption !== 'whole' && order[orderKey].drinkOption !== 'espresso') ? '+ $' + props.milk[order[orderKey].milkOption].price + ' ' + order[orderKey].milkOption  : ''} />
                                 <ListItemText className={classes.textRight}primary={'$' + order[orderKey].total} />
+                                {props.hovering && (index===props.hoverOver)? <IconButton onClick={() => props.remove(orderKey)}><Remove fontSize="small" color="secondary"/></IconButton> : ''}
                             </ListItem>
                         }
                     </div>

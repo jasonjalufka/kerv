@@ -1,5 +1,5 @@
 import React from 'react';
-import { VictoryPie, VictoryLegend, VictoryAxis, VictoryTheme, VictoryTooltip } from 'victory';
+import { VictoryPie } from 'victory';
 
 const PieChart = props => {
 
@@ -16,7 +16,6 @@ const PieChart = props => {
                 colorScale={["#222222", "#E8E8E8", "#4B4E6D", "#84DCC6", "#95A3B3"]}
                 data={legendName} /> */}
             <VictoryPie
-                style={{ labels: { fill: "white" } }}
                 labelRadius={80}
                 innerRadius={100}
                 padAngle={3}
