@@ -1,5 +1,5 @@
 import React from 'react';
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme, VictoryTooltip } from 'victory';
+import { VictoryBar, VictoryLine, VictoryChart, VictoryAxis, VictoryTheme, VictoryTooltip } from 'victory';
 
 const BarChart = props => {
 
@@ -35,6 +35,10 @@ const BarChart = props => {
                 // tickFormat specifies how y ticks should be displayed
                 tickFormat={(x) => (`$${x}`)}
             />
+            {/* <VictoryLine
+                interpolation="natural"
+                data={props.barChartData}
+            /> */}
             <VictoryBar
                 labelComponent={<VictoryTooltip />}
                 style={{ data: { fill: "#84DCC6" } }}

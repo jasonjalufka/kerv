@@ -8,27 +8,17 @@ const PieChart = props => {
     console.log('LegendName:', legendName);
     console.log('props: ', props.pieChartData);
     return (
-        <div>
-            {/* <VictoryLegend
-                // x={125} y={10}
-                orientation="horizontal"
-                gutter={20}
-                colorScale={["#222222", "#E8E8E8", "#4B4E6D", "#84DCC6", "#95A3B3"]}
-                data={legendName} /> */}
-            <VictoryPie
-                style={{ labels: { fill: "white" } }}
-                labelRadius={80}
-                innerRadius={100}
-                padAngle={3}
-                data={props.pieChartData}
-                // labelRadius={90}
-                style={{ labels: { fill: "#A9A9A9", fontSize: 20, fontWeight: "bold" } }}
-                colorScale={["#222222", "#E8E8E8", "#4B4E6D", "#84DCC6", "#95A3B3"]}
-
-                x="drinkName"
-                y="totalSold" >
-            </VictoryPie>
-        </div>
+        <VictoryPie
+            style={{ labels: { fill: "white" } }}
+            labelRadius={80}
+            innerRadius={100}
+            padAngle={3}
+            data={props.pieChartData}
+            style={{ labels: { fill: "#A9A9A9", fontSize: 16 } }}
+            colorScale={["#222222", "#E8E8E8", "#4B4E6D", "#84DCC6", "#95A3B3"]}
+            x="drinkName"
+            y="totalSold" >
+        </VictoryPie>
     );
 }
 
