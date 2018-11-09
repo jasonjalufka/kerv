@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import BarChart from '../../components/BarChart';
 import PieChart from '../../components/PieChart';
 
@@ -16,7 +17,7 @@ class Sales extends Component {
             monthSelected: '',
             barChartData: [],
             pieChartData: [],
-            isLoading: false
+            isLoading: true
         };
         this.handleSelectMonth = this.handleSelectMonth.bind(this);
     }
@@ -34,6 +35,10 @@ class Sales extends Component {
     // Fetch sales data for all months
     fetchSalesByMonth = () => {
         console.log('[fetchSalesByMonth()]');
+        this.setState({
+            ...this.state,
+            isLoading: true
+        })
         fetch('/api/sales/dates')
             .then(res => res.json())
             .then(data => {
@@ -85,7 +90,8 @@ class Sales extends Component {
 
         this.setState({
             ...this.state,
-            pieChartData: pieArr
+            pieChartData: pieArr,
+            isLoading: false
         })
     }
 
@@ -128,21 +134,34 @@ class Sales extends Component {
                         </Grid>
                     </Grid>
                 </div> */}
-                <Grid
-                    container
-                    direction="row"
-                    justify="space-around"
-                    alignItems="center">
-                    <Grid item xs={4} alignItems="stretch">
-                        <h2 style={{ padding: '10px', fontWeight: '100', fontSize: '2em' }}>{this.state.isLoading ? 'Total Revenue: $...' : 'Total Revenue: $' + parseFloat(this.state.totalRevenue).toFixed(2)}</h2>
+                {this.state.isLoading === true ?
+                    <Grid container
+                        direction="row"
+                        justify="center"
+                        alignItems="stretch">
+                        <Grid
+                            item
+                            style={{ padding: '200px' }}
+                            xs={12}>
+                            <CircularProgress size={75} />
+                        </Grid>
+                    </Grid> :
+                    <Grid
+                        container
+                        direction="row"
+                        justify="space-around"
+                        alignItems="center">
+                        <Grid item xs={4} alignItems="stretch">
+                            <h2 style={{ padding: '10px', fontWeight: '100', fontSize: '2em' }}>Total Revenue: ${parseFloat(this.state.totalRevenue).toFixed(2)}</h2>
+                        </Grid>
+                        <Grid item xs={4} alignItems="stretch">
+                            <BarChart barChartData={this.state.barChartData} />
+                        </Grid>
+                        <Grid item xs={4} alignItems="stretch">
+                            <PieChart pieChartData={this.state.pieChartData} />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={4} alignItems="stretch">
-                        <BarChart barChartData={this.state.barChartData} />
-                    </Grid>
-                    <Grid item xs={4} alignItems="stretch">
-                        <PieChart pieChartData={this.state.pieChartData} />
-                    </Grid>
-                </Grid>
+                }
             </Card >
         )
     }

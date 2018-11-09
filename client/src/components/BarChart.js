@@ -1,5 +1,5 @@
 import React from 'react';
-import { VictoryBar, VictoryLine, VictoryChart, VictoryAxis, VictoryTheme, VictoryTooltip } from 'victory';
+import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme, VictoryTooltip } from 'victory';
 
 const BarChart = props => {
 
