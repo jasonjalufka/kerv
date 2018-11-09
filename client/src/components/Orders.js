@@ -1,7 +1,7 @@
 import React from 'react';
 import {List, ListSubheader, Card, Divider, withStyles, ListItem, ListItemText, Button} from '@material-ui/core/';
 import { Remove } from '@material-ui/icons';
-import IconButton from '@material-ui/core/IconButton';
+import { IconButton, CircularProgress, Fade }from '@material-ui/core/';
 
 const styles = theme => ({
     button: {
@@ -17,25 +17,30 @@ const styles = theme => ({
 
     },
 })
-const OrderSummary = (props) => {
-    const { hasTip, addTip, classes, order } = props;
-    
-    let orderCountIndex = Object.keys(order).length - 1;
+
+const Orders = props => {
+    const { classes, order, addTip, hasTip } = props
     return (
         <Card style={{ position: 'relative', height: '100%' }}>
             <h3>Current Order</h3>
+            {/* <CircularProgress
+                variant="determinate"
+                value={props.completed}
+                /> */}
+                { props.orderPlaced && 
+                    <CircularProgress variant="determinate" value={props.completed}/>
+                }
+                <Fade in={props.confirmation} ><div>Order was submitted!</div></Fade>
             {order[0]&&<List>
             {
-                Object.keys(order).map((orderKey, index) => (
+                Object.keys(order).filter(element => !isNaN(parseInt(element))? element : '').map((orderKey, index) => (
                     <div key={index} onMouseEnter={() => props.handleHover(index)} onMouseLeave={() => props.handleHover(index)}>
-                        {
-                            (index !== orderCountIndex) && (index !== orderCountIndex - 1) && <ListItem >
-                                <ListItemText className={classes.textLeft} primary={order[orderKey].drinkOption} 
-                                    secondary={( order[orderKey].milkOption !== 'whole' && order[orderKey].drinkOption !== 'espresso') ? '+ $' + props.milk[order[orderKey].milkOption].price + ' ' + order[orderKey].milkOption  : ''} />
-                                <ListItemText className={classes.textRight}primary={'$' + order[orderKey].total} />
-                                {props.hovering && (index===props.hoverOver)? <IconButton onClick={() => props.remove(orderKey)}><Remove fontSize="small" color="secondary"/></IconButton> : ''}
-                            </ListItem>
-                        }
+                        <ListItem >
+                            <ListItemText className={classes.textLeft} primary={order[orderKey].drinkOption} 
+                                secondary={( order[orderKey].milkOption !== 'whole' && order[orderKey].drinkOption !== 'espresso') ? '+ $' + props.milk[order[orderKey].milkOption].price + ' ' + order[orderKey].milkOption  : ''} />
+                            <ListItemText className={classes.textRight}primary={'$' + order[orderKey].total} />
+                            {props.hovering && index === props.hoverOver ? <IconButton onClick={() => props.remove(orderKey)}><Remove fontSize="small" color="secondary"/></IconButton> : ''}
+                        </ListItem>
                     </div>
                 ))
             }
@@ -63,4 +68,4 @@ const OrderSummary = (props) => {
     );
 }
 
-export default withStyles(styles)(OrderSummary)
+export default withStyles(styles)(Orders)

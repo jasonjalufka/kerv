@@ -29,7 +29,7 @@ let MenuForm = (props) => {
         props.onSubmit(formValues);
         props.reset();
     }
-
+    
     return (
         <form onSubmit={handleSubmit(submitForm)}>
         <Grid container alignItems="center" style={{marginRight:0}}>
