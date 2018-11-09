@@ -5,7 +5,10 @@ exports.login = (req, res) => {
     console.log("inside barista controller with request", req.body);
     Barista.findOne({name: req.body.user, password: req.body.password})
     .then(user => {
-       Menu.get(req, res);
+        if(user)
+            Menu.get(req, res);
+        else
+            res.sendStatus(401);
     })
     .catch(err => {
         console.log('error finding user..', err)
