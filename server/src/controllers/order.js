@@ -8,7 +8,7 @@ exports.post = (req, res) => {
     let orderDoc = new Order()
     orderDoc.subtotal = req.body.order.orderTotal;
     orderDoc.tip = req.body.order.tip;
-    orderDoc.date = new Date("2018-08-25");
+    orderDoc.date = new Date("2018-09-25");
     orderDoc.totalCost = orderDoc.subtotal + orderDoc.tip;
 
     OrderItem.post(req.body.order)

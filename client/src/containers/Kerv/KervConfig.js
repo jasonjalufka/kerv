@@ -12,7 +12,8 @@ class KervConfig extends Component {
         displayMenu: false, 
         displayInventory: false,
         drinkEditMode: false,
-        milkEditMode: false
+        milkEditMode: false,
+        newDrinkMode: false
     };
 
     componentDidMount(){
@@ -33,6 +34,8 @@ class KervConfig extends Component {
             this.setState(state => ({drinkEditMode: !state.drinkEditMode}))
         : type === 'milk'?
             this.setState(state => ({milkEditMode: !state.milkEditMode}))
+        : type === 'newDrink'?
+            this.setState({newDrinkMode: true})
         : this.setState({milkEditMode: false, drinkEditMode: false})
     }
 
@@ -55,7 +58,7 @@ class KervConfig extends Component {
             })
             return null;
         })
-        this.props.onUpdateMenu({'payload' : payload});
+        this.props.onUpdateMenu({'payload' : payload, 'user': this.props.kerv.barista});
     }
 
     render() {
@@ -79,7 +82,7 @@ class KervConfig extends Component {
                         {/* conditional rendering of either menu or inventory config component */}
                             {this.state.displayMenu&&
                             <MenuConfig onSubmit={this.handleSubmit} onEditMode={this.handleEditMode}
-                            drinkEditMode={this.state.drinkEditMode} milkEditMode={this.state.milkEditMode}/>
+                            drinkEditMode={this.state.drinkEditMode} milkEditMode={this.state.milkEditMode} newDrinkMode={this.state.newDrinkMode}/>
                             }
                             {this.state.displayInventory&&<InventoryConfig kerv={this.props.kerv} />}
                         </Card>

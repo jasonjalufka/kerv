@@ -19,7 +19,7 @@ const renderTextField = ({
 //     return e.target.value;
 // }
 
-const renderNewDrinkFields = ({fields}) => (
+const renderNewDrinkFields = ({fields, saveOption}) => (
     <List subheader={<ListSubheader component="div">Additional</ListSubheader>}>
     {
         fields.map((drink, index) => (
@@ -31,33 +31,20 @@ const renderNewDrinkFields = ({fields}) => (
         ))
     }
         <ListItem>
-            <Button mini onClick={()=>{fields.push()}} variant="fab" color="primary" aria-label="Add">
+            <IconButton mini="true" onClick={()=>{fields.push(); saveOption('newDrink')}} variant="fab" color="primary" aria-label="Add">
                 <Add fontSize="small" />
-            </Button>
+            </IconButton>
         </ListItem>
     </List>
 )
 
-const renderOriginalDrinkFields = ({fields}) => (
-    <List subheader={<ListSubheader component="div">Drinks</ListSubheader>}>
+const renderOriginalFields = ({fields, props}) => (
+    <List subheader={<ListSubheader component="div">{props.name}</ListSubheader>}>
     {
-        fields.map((drink, index) => (
+        fields.map((type, index) => (
             <ListItem key={index}>
-                    <Field name={`${drink}.name`}  component={renderTextField}/>
-                    <Field name={`${drink}.price`} component={renderTextField} />
-            </ListItem>  
-        ))
-    }
-    </List>
-
-)
-const renderOriginalMilkFields = ({fields}) => (
-    <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
-    {
-        fields.map((milk, index) => (
-            <ListItem key={index}>
-                    <Field name={`${milk}.name`}  component={renderTextField}/>
-                    <Field name={`${milk}.price`} component={renderTextField} />
+                    <Field name={`${type}.name`}  component={renderTextField}/>
+                    <Field name={`${type}.price`} component={renderTextField} />
             </ListItem>  
         ))
     }
@@ -97,7 +84,7 @@ let MenuConfig = (props) => {
                 <Grid container spacing={24}>
                     <Grid item xs>
                         { props.drinkEditMode &&
-                            <FieldArray name='drink' component={renderOriginalDrinkFields}/>
+                            <FieldArray name='drink' component={renderOriginalFields} props={{name: 'drinks'}}/>
                         }
 
                         { !props.drinkEditMode &&
@@ -112,10 +99,12 @@ let MenuConfig = (props) => {
                             }
                             </List>
                         }
+                        <FieldArray name="newDrinks" component={renderNewDrinkFields} saveOption={(mode) =>  props.onEditMode(mode) } />
+
                     </Grid>
                     <Grid item xs>
                         { props.milkEditMode && 
-                            <FieldArray name="milk" component={renderOriginalMilkFields}/>
+                            <FieldArray name="milk" component={renderOriginalFields} props={{name: 'milk'}}/>
                         }
                         { !props.milkEditMode &&
                             <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
@@ -131,10 +120,9 @@ let MenuConfig = (props) => {
                         }
                     </Grid>
                 </Grid>
-                {(props.milkEditMode || props.drinkEditMode) &&<Button type="submit" color="primary">Save Changes</Button>}
+                {(props.milkEditMode || props.drinkEditMode || props.newDrinkMode) &&<Button type="submit" color="primary">Save Changes</Button>}
                 {(props.milkEditMode || props.drinkEditMode) &&<Button onClick={() => props.onEditMode()} color="primary">Cancel</Button>}
 
-                <FieldArray name="newDrinks" component={renderNewDrinkFields} />
             </form>       
         </Card>
     );
