@@ -6,6 +6,7 @@ import { reducer as formReducer } from 'redux-form'
 import { Provider } from 'react-redux';
 import kervReducer from './store/reducers/kervReducer'
 import orderReducer from './store/reducers/orderReducer';
+import configReducer from './store/reducers/configReducer';
 import { composeWithDevTools } from "redux-devtools-extension";
 import './index.css';
 import App from './App';
@@ -15,7 +16,8 @@ import App from './App';
 const rootReducer = combineReducers({
 	order: orderReducer,
 	kerv: kervReducer,
-	form: formReducer
+	form: formReducer,
+	config: configReducer
 });
 
 const composeEnhancer = composeWithDevTools || compose;

@@ -2,7 +2,6 @@
 import * as actionTypes from '../actions';
 
 const initialState = {
-    showApp: false,
     milk: {},
     bean: {},
     drink: {}
@@ -10,6 +9,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case actionTypes.UPDATE_MENU_SUCCESS:
         case actionTypes.GET_LOGIN_SUCCESS:
             let newState = { ...state };
             Object.keys(action.payload.kerv).map((type, index) => {

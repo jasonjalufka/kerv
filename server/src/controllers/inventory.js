@@ -28,3 +28,9 @@ exports.getId = name => {
 		.then(inventoryDoc => inventoryDoc._id)
 		.catch(err => console.log('Could not find inventory item by name: ', err));
 }
+
+exports.findAndUpdate = (name, update) => {
+	return Inventory.findOneAndUpdate({name: name}, update)
+		.then(inventoryDoc => console.log('update', inventoryDoc))
+		.catch(err => console.log('error updating', err))
+}

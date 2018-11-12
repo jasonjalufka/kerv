@@ -2,14 +2,24 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import MenuConfig from '../../components/MenuConfig';
 import InventoryConfig from '../../components/InventoryConfig';
-import {Grid, Card, List, ListItem, ListItemText, ListSubheader} from '@material-ui/core/';
+import {Grid, Card, List, ListItem, ListSubheader, IconButton} from '@material-ui/core/';
+import { updateMenu } from '../../store/actions';
+import { updatedDiff, addedDiff } from 'deep-object-diff';
+import {LocalCafe, LocalShipping} from '@material-ui/icons/';
 
 class KervConfig extends Component {
     state ={
-        // open: false,
         displayMenu: false, 
-        displayInventory: false
+        displayInventory: false,
+        drinkEditMode: false,
+        milkEditMode: false
     };
+
+    componentDidMount(){
+        if(!this.props.kerv.barista){
+            this.props.history.push('/login')
+          }
+      }
 
     handleDisplayInventory = () => {
         this.setState(state =>({displayInventory: true, displayMenu: false}));
@@ -18,23 +28,47 @@ class KervConfig extends Component {
     handleDisplayMenu = () => {
         this.setState(state => ({displayMenu: true, displayInventory: false }));
     }
+    handleEditMode = (type) => {
+        type === 'drink'?
+            this.setState(state => ({drinkEditMode: !state.drinkEditMode}))
+        : type === 'milk'?
+            this.setState(state => ({milkEditMode: !state.milkEditMode}))
+        : this.setState({milkEditMode: false, drinkEditMode: false})
+    }
 
-    handleSubmit = formValues =>{
-        console.log("attempting submit on drink" );
+    handleSubmit = (formValues, original) => {
+        this.setState({drinkEditMode: false, milkEditMode: false});
+        let diff = updatedDiff(original, formValues)
+        let additional = addedDiff(original, formValues);
+        let payload = {}
+        payload['newDrinks'] = additional;
+
+        Object.keys(diff).map(type => {
+            payload[type] = {}
+            Object.keys(diff[type]).map(key => {
+                payload[type][original[type][key].name] = {}
+                Object.keys(diff[type][key]).map(data => {
+                    payload[type][original[type][key].name][data] = diff[type][key][data]
+                    return null;
+                })
+                return null;
+            })
+            return null;
+        })
+        this.props.onUpdateMenu({'payload' : payload});
     }
 
     render() {
         return (  
                 <Grid container spacing={24}>
-                    <Grid item xs={3}>
+                    <Grid item xs={2}>
                         <Card>
                             <List subheader={<ListSubheader component="div">Configurations</ListSubheader>}>
                                 <ListItem button onClick={this.handleDisplayMenu}>
-                                    <ListItemText primary={"Update Menu"}/>
-                                    {/* {this.state.open ? <ExpandLess /> : <ExpandMore />} */}
+                                    <IconButton><LocalCafe /></IconButton>
                                 </ListItem>
                                 <ListItem button onClick={this.handleDisplayInventory}>
-                                    <ListItemText primary={"Update Inventory"}/>
+                                    <IconButton><LocalShipping /></IconButton>
                                 </ListItem>
                             </List>
                         </Card>
@@ -44,7 +78,8 @@ class KervConfig extends Component {
                         <Card>
                         {/* conditional rendering of either menu or inventory config component */}
                             {this.state.displayMenu&&
-                            <MenuConfig kerv={this.props.kerv} onSubmit={this.handleSubmit}/>
+                            <MenuConfig onSubmit={this.handleSubmit} onEditMode={this.handleEditMode}
+                            drinkEditMode={this.state.drinkEditMode} milkEditMode={this.state.milkEditMode}/>
                             }
                             {this.state.displayInventory&&<InventoryConfig kerv={this.props.kerv} />}
                         </Card>
@@ -62,6 +97,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        onUpdateMenu: (payload) => dispatch(updateMenu(payload))
     };
 };
 

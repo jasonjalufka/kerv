@@ -1,100 +1,142 @@
 import React from 'react';
 import { Field, FieldArray, reduxForm } from 'redux-form';
-import { TextField, ListSubheader, List, ListItem, Button, Grid, Card} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { TextField, ListSubheader, List, ListItem, ListItemText, Button, Grid, Card, IconButton} from '@material-ui/core';
+import {Edit, Add} from '@material-ui/icons/';
+import { connect } from 'react-redux'
 
 const renderTextField = ({
     input,
-    defaultValue,
-    label,
+    label
 }) => (
-        <TextField
-            defaultValue={defaultValue}
-            onChange={input.onChange}
-            label={label}
-        />
-    )
+    <TextField
+        value={input.value}
+        onChange={input.onChange}
+        label={label}
+    />)
 
-// const renderField = (field) => (
-//     <div className="input-row">
-//         <input {...field.input} type="text"/>
-//         {field.meta.touched && field.meta.error && 
-//         <span className="error">{field.meta.error}</span>}
-//     </div>
-//     )
+// let handleChange = e => {
+//     console.log("in handleChange");
+//     return e.target.value;
+// }
 
-let handleChange = e => {
-    console.log("in handleChange");
-    return e.target.value;
-}
-
-const renderDrinkFields = ({fields}) => (
+const renderNewDrinkFields = ({fields}) => (
     <List subheader={<ListSubheader component="div">Additional</ListSubheader>}>
-        {
-            fields.map((drink, index) => (
-                <ListItem>
-                    {/* <Fields id={index} names={["drinkName"+index, 'drinkPrice'+index]} component={renderDrinkField}/> */}
-                    {/* <FieldArray name={"newEntry" + index} component={renderDrinkInput} /> */}
-                    <Field label="Drink Name" name={"name" + index} component={renderTextField}/>
-                    <Field label="Drink Price" name={"price" + index} component={renderTextField}/>
-                </ListItem>
-            ))
-        }
+    {
+        fields.map((drink, index) => (
+            <ListItem key={index}>
+                <Field label="Name" name={`${drink}.name`} component={renderTextField}/>
+                <Field label="Price" name={`${drink}.price`} component={renderTextField}/>
+                <Field label="Milk Required" name={`${drink}.milkReq`} component={renderTextField}/>
+            </ListItem>
+        ))
+    }
         <ListItem>
             <Button mini onClick={()=>{fields.push()}} variant="fab" color="primary" aria-label="Add">
-                <AddIcon />
+                <Add fontSize="small" />
             </Button>
         </ListItem>
     </List>
 )
 
+const renderOriginalDrinkFields = ({fields}) => (
+    <List subheader={<ListSubheader component="div">Drinks</ListSubheader>}>
+    {
+        fields.map((drink, index) => (
+            <ListItem key={index}>
+                    <Field name={`${drink}.name`}  component={renderTextField}/>
+                    <Field name={`${drink}.price`} component={renderTextField} />
+            </ListItem>  
+        ))
+    }
+    </List>
 
+)
+const renderOriginalMilkFields = ({fields}) => (
+    <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
+    {
+        fields.map((milk, index) => (
+            <ListItem key={index}>
+                    <Field name={`${milk}.name`}  component={renderTextField}/>
+                    <Field name={`${milk}.price`} component={renderTextField} />
+            </ListItem>  
+        ))
+    }
+    </List>
 
+)
+let getInitialFormData = (kerv) => {
+    let data = {
+        drink: [],
+        milk: []
+    }
+
+    Object.keys(kerv).map(type => {
+        type !== 'bean' && type!== 'barista'?
+        Object.keys(kerv[type]).map(key => {
+            let price = 0
+            key === 'whole' ?
+                price = 0 : price=kerv[type][key].price
+            data[type].push({'name': key, 'price': price})
+            return null;
+        })
+        : console.log('noinot')
+        return null;
+    })
+    return data;
+}
 let MenuConfig = (props) => {
     const { handleSubmit} = props;
     const submitForm = (formValues) => {
-        props.onSubmit(formValues);
-        console.log("in submitForm of MenuConfig");
-        console.log(formValues);
+        props.onSubmit(formValues, getInitialFormData(props.kerv));
         props.reset();
     }
     
     return (
-            <Card>
-                <form onSubmit={handleSubmit(submitForm)}>
-                    <Grid container spacing={24}>
-                        <Grid item xs>
+        <Card>
+            <form onSubmit={handleSubmit(submitForm)}>
+                <Grid container spacing={24}>
+                    <Grid item xs>
+                        { props.drinkEditMode &&
+                            <FieldArray name='drink' component={renderOriginalDrinkFields}/>
+                        }
+
+                        { !props.drinkEditMode &&
                             <List subheader={<ListSubheader component="div">Drinks</ListSubheader>}>
-                                {
-                                    Object.keys(props.kerv.drink).map((drink, index) => ( 
-                                        <ListItem>
-                                            <Field name={drink} onChange={handleChange} defaultValue={drink} component={renderTextField} />
-                                            <Field name={drink +"price"} onChange={handleChange} defaultValue={props.kerv.drink[drink].price} component={renderTextField} />
-                                        </ ListItem>                                                
-                                    ))
-                                }
-                                {/* <Button mini onClick={addNewField} variant="fab" color="primary" aria-label="Add">
-                                    <AddIcon />
-                                </Button> */}
+                            <IconButton onClick={()=> {props.onLoadFormData(getInitialFormData(props.kerv));props.onEditMode('drink') }}><Edit fontSize="small"/></IconButton>
+                            {
+                                Object.keys(props.kerv.drink).map((drink, index) => ( 
+                                    <ListItem key={index}>
+                                        <ListItemText primary={drink} secondary={props.kerv.drink[drink].price}/>
+                                    </ ListItem>                                                
+                                ))
+                            }
                             </List>
-                            <FieldArray name={"newDrinks"} component={renderDrinkFields}/>
-                        </Grid>
-                        <Grid item xs>
-                            <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
-                                {
-                                    Object.keys(props.kerv.milk).map((milk, index) => (
-                                        <ListItem>
-                                            <Field name={milk} onChange={handleChange} defaultValue={milk} component={renderTextField} />
-                                            <Field name={milk + "Price"} onChange={handleChange} defaultValue={props.kerv.milk[milk].price ? props.kerv.milk[milk].price : ''} component={renderTextField}/>
-                                        </ ListItem>
-                                    ))
-                                }
-                            </List>
-                        </Grid>
+                        }
                     </Grid>
-                    <Button type="submit" variant="contained" color="primary">Submit</Button>
-                </form>       
-            </Card>
+                    <Grid item xs>
+                        { props.milkEditMode && 
+                            <FieldArray name="milk" component={renderOriginalMilkFields}/>
+                        }
+                        { !props.milkEditMode &&
+                            <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
+                            <IconButton onClick={()=> {props.onLoadFormData(getInitialFormData(props.kerv));props.onEditMode('milk') }}><Edit fontSize="small"/></IconButton>
+                            {
+                                Object.keys(props.kerv.milk).map((milk, index) => (
+                                    <ListItem key={index}>
+                                        <ListItemText primary={milk} secondary={props.kerv.milk[milk].price ? props.kerv.milk[milk].price : ''}/>
+                                    </ ListItem>
+                                ))
+                            }
+                            </List>
+                        }
+                    </Grid>
+                </Grid>
+                {(props.milkEditMode || props.drinkEditMode) &&<Button type="submit" color="primary">Save Changes</Button>}
+                {(props.milkEditMode || props.drinkEditMode) &&<Button onClick={() => props.onEditMode()} color="primary">Cancel</Button>}
+
+                <FieldArray name="newDrinks" component={renderNewDrinkFields} />
+            </form>       
+        </Card>
     );
                  
 };
@@ -103,4 +145,22 @@ MenuConfig = reduxForm({
     form: 'menuConfig'
 })(MenuConfig)
 
-export default MenuConfig
+const mapStateToProps = state => {
+    return {
+      initialValues: state.config.data,
+      kerv : state.kerv
+    };
+  };
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onLoadFormData: (data) => {
+            dispatch({ type: 'LOAD', data: data });
+          }
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MenuConfig);

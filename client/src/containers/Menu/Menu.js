@@ -6,7 +6,10 @@ import OrderSummary from '../OrderSummary/OrderSummary';
 import {Grid} from '@material-ui/core';
 
 class Menu extends Component {
-  state = {tip: 0}
+  state = {
+    tip: 0
+  }
+
   componentDidMount(){
     if(!this.props.kerv.barista){
       this.props.history.push('/login')

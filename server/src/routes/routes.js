@@ -1,6 +1,7 @@
 const Order = require('../controllers/order');
 const OrderItem = require('../controllers/orderItem');
 const Barista = require('../controllers/barista');
+const Menu = require('../controllers/menu');
 
 module.exports = app => {
     app.route('/api/sales').post(Order.post);
@@ -8,4 +9,6 @@ module.exports = app => {
     app.route('/api/sales/dates').get(Order.getSalesDates);
     app.route('/api/sales/by/:type').get(OrderItem.getSalesByType);
     app.route('/api/login/').post(Barista.login);
+    app.route('/api/config').get(Menu.get);
+    app.route('/api/menu').post(Menu.update);
 };

@@ -25,3 +25,9 @@ exports.getId = (name) => {
 			console.log("Could not find drink by name", err);
 		})
 }
+
+exports.findAndUpdate = (name, update) => {
+	return Drink.findOneAndUpdate({name: name}, update)
+		.then(drinkDoc => console.log('update', drinkDoc))
+		.catch(err => console.log('error updating', err))
+}

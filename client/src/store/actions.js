@@ -2,10 +2,15 @@ import { CALL_API } from 'redux-api-middleware';
 
 export const ADD_ORDER_ITEM = 'ADD_ORDER_ITEM';
 export const REMOVE_ORDER_ITEM = 'REMOVE_ORDER_ITEM';
+export const LOAD = 'LOAD';
 
 export const ADD_SALE_REQUEST = "ADD_SALE_REQUEST";
 export const ADD_SALE_SUCCESS = "ADD_SALE_SUCCESS";
 export const ADD_SALE_FAILURE = "ADD_SALE_FAILURE";
+
+export const UPDATE_MENU_REQUEST = "UPDATE_MENU_REQUEST";
+export const UPDATE_MENU_SUCCESS = "UPDATE_MENU_SUCCESS";
+export const UPDATE_MENU_FAILURE = "UPDATE_MENU_FAILURE";
 
 export const GET_SALES_REQUEST = "GET_SALE_REQUEST";
 export const GET_SALES_SUCCESS = "GET_SALE_SUCCESS";
@@ -31,6 +36,16 @@ export const getLogin = (payload) => ({
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     types: [GET_LOGIN_REQUEST,GET_LOGIN_SUCCESS,GET_LOGIN_FAILURE],
+    body: JSON.stringify(payload)
+  }
+})  
+
+export const updateMenu = (payload) => ({
+  [CALL_API]: {
+    endpoint: '/api/menu',
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    types: [UPDATE_MENU_REQUEST,UPDATE_MENU_SUCCESS,UPDATE_MENU_FAILURE],
     body: JSON.stringify(payload)
   }
 })  
