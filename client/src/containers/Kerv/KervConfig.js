@@ -40,7 +40,7 @@ class KervConfig extends Component {
     }
 
     handleSubmit = (formValues, original) => {
-        this.setState({drinkEditMode: false, milkEditMode: false});
+        this.setState({drinkEditMode: false, milkEditMode: false, newDrinkMode: false});
         let diff = updatedDiff(original, formValues)
         let additional = addedDiff(original, formValues);
         let payload = {}

@@ -38,8 +38,8 @@ const renderNewDrinkFields = ({fields, saveOption}) => (
     </List>
 )
 
-const renderOriginalFields = ({fields, props}) => (
-    <List subheader={<ListSubheader component="div">{props.name}</ListSubheader>}>
+const renderOriginalFields = ({fields, title}) => (
+    <List subheader={<ListSubheader component="div">{title}</ListSubheader>}>
     {
         fields.map((type, index) => (
             <ListItem key={index}>
@@ -84,7 +84,7 @@ let MenuConfig = (props) => {
                 <Grid container spacing={24}>
                     <Grid item xs>
                         { props.drinkEditMode &&
-                            <FieldArray name='drink' component={renderOriginalFields} props={{name: 'drinks'}}/>
+                            <FieldArray name='drink' component={renderOriginalFields} title="Drinks"/>
                         }
 
                         { !props.drinkEditMode &&
@@ -104,7 +104,7 @@ let MenuConfig = (props) => {
                     </Grid>
                     <Grid item xs>
                         { props.milkEditMode && 
-                            <FieldArray name="milk" component={renderOriginalFields} props={{name: 'milk'}}/>
+                            <FieldArray name="milk" component={renderOriginalFields} title="Milk"/>
                         }
                         { !props.milkEditMode &&
                             <List subheader={<ListSubheader component="div">Milk</ListSubheader>}>
