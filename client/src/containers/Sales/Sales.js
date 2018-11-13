@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Card from '@material-ui/core/Card';
-import Grid from '@material-ui/core/Grid';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { Card, Button, Grid, CircularProgress } from '@material-ui/core';
 import BarChart from '../../components/BarChart';
 import PieChart from '../../components/PieChart';
 
@@ -17,39 +15,50 @@ class Sales extends Component {
             monthSelected: '',
             barChartData: [],
             pieChartData: [],
-            isLoading: true
+            baristaTipData: [],
+            isLoading: true,
+            baristaView: false
         };
         this.handleSelectMonth = this.handleSelectMonth.bind(this);
     }
 
     componentDidMount() {
-        console.log('[componentDidMount()]');
         (!this.props.kerv.barista ? this.props.history.push('/login') : this.fetchSalesByMonth());
     }
 
     handleSelectMonth(month) {
-        console.log('[handleSelectMonth()]');
         this.setState({ monthSelected: month });
     }
-
+    
     // Fetch sales data for all months
     fetchSalesByMonth = () => {
-        console.log('[fetchSalesByMonth()]');
         this.setState({
             ...this.state,
             isLoading: true
         })
         fetch('/api/sales/dates')
             .then(res => res.json())
-            .then(data => {
+            .then(data => { console.log('this is data from ', data)
                 this.updateTotalRevenue(data);
                 this.updateBarChartData(data);
                 this.updatePieChartData(data);
             })
     }
 
+    updateBaristaTipData=(data) =>{
+        let baristaTipArr = []
+        Object.keys(data).forEach(monthKey => {
+            console.log('deeez tips', data[monthKey].tips)
+            baristaTipArr.push({"month": monthKey, "tips": data[monthKey].tips})
+        })
+
+        this.setState({
+            ...this.state,
+            baristaTipData: baristaTipArr
+        });
+        console.log(this.state.baristaTipData)
+    }
     updateTotalRevenue = data => {
-        console.log('[updateTotalRevenue]', data);
         let totalRev = 0;
         Object.keys(data).forEach(monthKey => {
             totalRev += data[monthKey].totalRevenue;
@@ -62,7 +71,6 @@ class Sales extends Component {
     }
 
     updateBarChartData = data => {
-        console.log('[updateBarChartData()]');
         const barArr = []
 
         Object.keys(data).forEach(monthKey => {
@@ -73,18 +81,32 @@ class Sales extends Component {
             ...this.state,
             barChartData: barArr
         });
+        console.log(this.state.barChartData)
     }
+    getBaristaStats = () => {
+        console.log('get these stats...');
+        this.setState({
+            ...this.state,
+            isLoading: true
+        })
+        fetch(`/api/sales/${this.props.kerv.barista}/dates`)
+            .then(res => res.json())
+            .then(data => { console.log('this is data from ', data)
+                this.updateTotalRevenue(data);
+                this.updateBarChartData(data);
+                this.updatePieChartData(data);
+                this.updateBaristaTipData(data);
+                this.setState({baristaView: true})
+            })
 
+    }
     updatePieChartData = data => {
-        console.log('[updatePieChartData()]');
         let pieArr = []
         let index
         Object.keys(data).forEach(month => {
             Object.keys(data[month].drinks).forEach(drinkName => {
                 index = pieArr.findIndex(o => o.drinkName === drinkName);
                 (index > -1 ? pieArr[index].totalSold += data[month].drinks[drinkName].drinkCount : pieArr.push({ "drinkName": drinkName, "totalSold": data[month].drinks[drinkName].drinkCount }))
-                console.log('Index: ', index);
-                console.log(pieArr);
             })
         })
 
@@ -98,18 +120,17 @@ class Sales extends Component {
     fetchSalesData = (subRoute) => {
         let filter = (subRoute ? subRoute : DEFAULT_QUERY)
         let dataArr = []
-        console.log(API + filter);
         fetch(API + filter)
             .then(response => response.json())
             .then(data => {
                 Object.keys(data).map(month => {
                     dataArr.push({ x: month, y: data[month].totalRevnue })
+                    return null;
                 });
                 this.setState({
                     ...this.state,
                     graphData: dataArr
                 });
-                console.log('State: ', this.state);
             })
             .catch(err => console.log('ERROR: ', err));
     }
@@ -134,6 +155,7 @@ class Sales extends Component {
                         </Grid>
                     </Grid>
                 </div> */}
+                <Button onClick={()=>this.getBaristaStats()}>View Personal Sales</Button>
                 {this.state.isLoading === true ?
                     <Grid container
                         direction="row"
@@ -160,7 +182,13 @@ class Sales extends Component {
                         <Grid item xs={4} alignItems="stretch">
                             <PieChart pieChartData={this.state.pieChartData} />
                         </Grid>
+                        {this.state.baristaView&&
+                        <Grid item xs={4} alignItems="stretch">
+                            {this.state.baristaTipData.map(index =><div>Month:{index.month}: ${index.tips}</div>)}
+                        </Grid>
+                        }
                     </Grid>
+                    
                 }
             </Card >
         )

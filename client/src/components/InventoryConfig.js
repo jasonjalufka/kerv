@@ -1,11 +1,11 @@
 import React from 'react';
 import List from '@material-ui/core/List';
-import { Field, FieldArray } from 'redux-form';
+import { FieldArray } from 'redux-form';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import {Grid, IconButton, Button} from '@material-ui/core';
-import {Edit, Add, Remove} from '@material-ui/icons/';
+import {Edit} from '@material-ui/icons/';
 import {renderNewFields, renderOriginalFields} from './FieldRenderer';
 
 

@@ -5,8 +5,6 @@ const PieChart = props => {
 
     let legendName = []
     props.pieChartData.forEach(o => legendName.push({ "name": o.drinkName }));
-    console.log('LegendName:', legendName);
-    console.log('props: ', props.pieChartData);
     return (
         <div>
             <VictoryPie

@@ -22,8 +22,9 @@ const reducer = (state = initialState, action) => {
             reducedState.orderTotal -= reducedState[action.orderKey].total
             let shiftedState = {}
             delete reducedState[action.orderKey]
-            Object.keys(reducedState).map(key => key).filter(element => !isNaN(parseInt(element))) .map((oldKey, index) => {
+            Object.keys(reducedState).map(key => key).filter(element => !isNaN(parseInt(element))).map((oldKey, index) => {
                 shiftedState[index] = reducedState[oldKey]
+                return null
             })
             shiftedState['orderCount'] = reducedState.orderCount - 1;
             shiftedState['orderTotal'] = reducedState.orderTotal

@@ -3,7 +3,6 @@ const Menu = require('./menu');
 const Order = require('../models/order')
 const OrderCtrl = require('./order');
 exports.getSalesDates = (req, res) => {
-    console.log('got ur request....', req.params.barista)
     let agg = [ {
         $match: { name: req.params.barista }
     },
@@ -27,10 +26,32 @@ exports.getSalesDates = (req, res) => {
              orderItems: {$addToSet: '$orders.orderItems'} 
          }
      }]
-     agg = agg.concat(OrderCtrl.aggregateOrderItems()['agg'])
-    
-    Barista.aggregate(agg, (err, results) => OrderCtrl.parseAggregation(err, results, res))
-         
+    agg = agg.concat(OrderCtrl.aggregateOrderItems()['agg'])
+    Barista.aggregate([
+        {
+            $match: { name: req.params.barista }
+        },
+        {
+            $lookup: {
+                from: 'orders',
+                localField: 'orders',
+                foreignField: '_id',
+                as: 'orders'
+            }
+        },
+        {
+            $unwind: '$orders' 
+        },
+        {
+            $group: {
+                _id: {$month: '$orders.date'},
+                tip: {$sum: '$orders.tip'} 
+            }
+        }
+    ],(err, tips)=> {
+        if(err) console.log('Error retreiving tips')
+        else Barista.aggregate(agg, (err, results) => OrderCtrl.parseAggregation(err, results, res, tips))
+    })
 }
 
 exports.login = (req, res) => {

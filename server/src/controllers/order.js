@@ -101,7 +101,7 @@ exports.aggregateOrderItems = () => (
     }]
 }
 )
-exports.parseAggregation = (err, results, res) => {
+exports.parseAggregation = (err, results, res, tips) => {
     if (err) throw err;
     let response = {}
     results.map(month => {
@@ -129,6 +129,10 @@ exports.parseAggregation = (err, results, res) => {
             }
         }
     })
+    if(tips)
+        tips.map(tip => {
+            response[tip._id]['tips'] = tip.tip
+        })
     res.send(response)
 }
 exports.getSalesDates = (req, res) => {

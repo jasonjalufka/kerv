@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import MenuConfig from '../../components/MenuConfig';
 import InventoryConfig from '../../components/InventoryConfig';
-import {Grid, Card, List, ListItem, ListSubheader, IconButton} from '@material-ui/core/';
+import { Card, IconButton} from '@material-ui/core/';
 import { updateMenu } from '../../store/actions';
 import { updatedDiff, addedDiff } from 'deep-object-diff';
 import {LocalCafe, LocalShipping} from '@material-ui/icons/';
