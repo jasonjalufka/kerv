@@ -1,8 +1,40 @@
 const Barista = require('../models/barista');
 const Menu = require('./menu');
+const Order = require('../models/order')
+const OrderCtrl = require('./order');
+exports.getSalesDates = (req, res) => {
+    console.log('got ur request....', req.params.barista)
+    let agg = [ {
+        $match: { name: req.params.barista }
+    },
+    {
+        $lookup: {
+            from: 'orders',
+            localField: 'orders',
+            foreignField: '_id',
+            as: 'orders'
+        }
+    },
+    {
+        $unwind: '$orders' 
+    },
+    {
+        $unwind: '$orders.orderItems'
+    },
+     {
+         $group: {
+             _id: {$month: '$orders.date'},
+             orderItems: {$addToSet: '$orders.orderItems'} 
+         }
+     }]
+     agg = agg.concat(OrderCtrl.aggregateOrderItems()['agg'])
+    
+    Barista.aggregate(agg, (err, results) => OrderCtrl.parseAggregation(err, results, res))
+         
+}
 
 exports.login = (req, res) => {
-    console.log("inside barista controller with request", req.body);
+    console.log("inside barista controller with request", req);
     Barista.findOne({name: req.body.user, password: req.body.password})
     .then(user => {
         if(user)

@@ -51,93 +51,98 @@ exports.get = (req, res) => {
         })
 }
 
-exports.getSalesDates = (req, res) => {
-    Order.aggregate(
-        [
-            {
-               $unwind: '$orderItems'
-            },
-            {
-                $group: {
-                    _id: {$month: '$date'},
-                    orderItems: {$addToSet: '$orderItems'} ,
-                }
-            }, 
-            {
-                $lookup: {
-                    from: 'orderitems',
-                    localField: 'orderItems',
-                    foreignField: '_id',
-                    as: 'orderItems'
-                }
-            },
-            {
-                 $unwind: '$orderItems'
-            },
-            {
-                $lookup: {
-                    from: 'drinks',
-                    localField: 'orderItems.drink',
-                    foreignField: '_id',
-                    as: 'orderItems.drink'
-                }
-             },
-             {
-                $lookup: {
-                    from: 'inventories',
-                    localField: 'orderItems.milk',
-                    foreignField: '_id',
-                    as: 'orderItems.milk'
-                }
-             },
-             {
-                $lookup: {
-                    from: 'inventories',
-                    localField: 'orderItems.bean',
-                    foreignField: '_id',
-                    as: 'orderItems.bean'
-                }
-             },
-             {
-                 $project: {
-                    '_id': 1,
-                    'orderItems.total': 1,
-                    'orderItems.drink.name': 1,
-                    'orderItems.drink.price': 1, 
-                    'orderItems.bean.name': 1, 
-                    'orderItems.milk.name': 1, 
-                    'orderItems.milk.price': 1 
-                }
-            }
-        ],
-        function(err,results) {
-            if (err) throw err;
-            let response = {}
-            results.map(month => {
-                if(!response.hasOwnProperty(month._id)){
-                    response[month._id] = {'drinkCount': 1, 'totalRevenue': parseFloat(month.orderItems.total), drinks : {}, milk : {}}
-                }
-                else {
-                    response[month._id].drinkCount += 1;
-                    response[month._id].totalRevenue += parseFloat(month.orderItems.total)
-                }
-
-                if(!response[month._id].drinks.hasOwnProperty(month.orderItems.drink[0].name)){
-                    response[month._id].drinks[month.orderItems.drink[0].name] = {'drinkCount': 1, 'totalDrinkRevenue' : parseFloat(month.orderItems.drink[0].price)}
-                }
-                else {
-                    response[month._id].drinks[month.orderItems.drink[0].name].drinkCount += 1;
-                    response[month._id].drinks[month.orderItems.drink[0].name].totalDrinkRevenue += parseFloat(month.orderItems.drink[0].price);
-                }
-                if(!response[month._id].milk.hasOwnProperty(month.orderItems.milk.name) && month.orderItems.milk[0]!= undefined){
-                    response[month._id].milk[month.orderItems.milk[0].name] = {'milkCount': 1, 'totalMilkRevenue' : parseFloat(month.orderItems.milk[0].price)}
-                }
-                else if(month.orderItems.milk[0]!=undefined){
-                    response[month._id].milk[month.orderItems.milk[0].name].milkCount += 1;
-                    response[month._id].milk[month.orderItems.milk[0].name].totalMilkRevenue += parseFloat(month.orderItems.milk[0].price);
-                }
-            })
-            res.send(response)           
+exports.aggregateOrderItems = () => (
+    { 'agg':[
+    {
+        $lookup: {
+            from: 'orderitems',
+            localField: 'orderItems',
+            foreignField: '_id',
+            as: 'orderItems'
         }
+    },
+    {
+         $unwind: '$orderItems'
+    },
+    {
+        $lookup: {
+            from: 'drinks',
+            localField: 'orderItems.drink',
+            foreignField: '_id',
+            as: 'orderItems.drink'
+        }
+     },
+     {
+        $lookup: {
+            from: 'inventories',
+            localField: 'orderItems.milk',
+            foreignField: '_id',
+            as: 'orderItems.milk'
+        }
+     },
+     {
+        $lookup: {
+            from: 'inventories',
+            localField: 'orderItems.bean',
+            foreignField: '_id',
+            as: 'orderItems.bean'
+        }
+     },
+     {
+         $project: {
+            '_id': 1,
+            'orderItems.total': 1,
+            'orderItems.drink.name': 1,
+            'orderItems.drink.price': 1, 
+            'orderItems.bean.name': 1, 
+            'orderItems.milk.name': 1, 
+            'orderItems.milk.price': 1 
+        }
+    }]
+}
+)
+exports.parseAggregation = (err, results, res) => {
+    if (err) throw err;
+    let response = {}
+    results.map(month => {
+        if(!response.hasOwnProperty(month._id)){
+            response[month._id] = {'drinkCount': 1, 'totalRevenue': parseFloat(month.orderItems.total), drinks : {}, milk : {}}
+        }
+        else{
+            response[month._id].drinkCount += 1;
+            response[month._id].totalRevenue += parseFloat(month.orderItems.total)
+        }
+
+        if(!response[month._id].drinks.hasOwnProperty(month.orderItems.drink[0].name)){
+            response[month._id].drinks[month.orderItems.drink[0].name] = {'drinkCount': 1, 'totalDrinkRevenue' : parseFloat(month.orderItems.drink[0].price)}
+        }
+        else {
+            response[month._id].drinks[month.orderItems.drink[0].name].drinkCount += 1;
+            response[month._id].drinks[month.orderItems.drink[0].name].totalDrinkRevenue += parseFloat(month.orderItems.drink[0].price);
+        }
+        if(month.orderItems.milk.length > 0){
+            if(!response[month._id].milk.hasOwnProperty(month.orderItems.milk[0].name))
+                response[month._id].milk[month.orderItems.milk[0].name] = {'milkCount': 1, 'totalMilkRevenue' : parseFloat(month.orderItems.milk[0].price)}
+            else {
+                response[month._id].milk[month.orderItems.milk[0].name].milkCount += 1;
+                response[month._id].milk[month.orderItems.milk[0].name].totalMilkRevenue += parseFloat(month.orderItems.milk[0].price);
+            }
+        }
+    })
+    res.send(response)
+}
+exports.getSalesDates = (req, res) => {
+    let agg = [{
+        $unwind: '$orderItems'
+     },
+     {
+         $group: {
+             _id: {$month: '$date'},
+             orderItems: {$addToSet: '$orderItems'} ,
+         }
+     }]
+     agg=agg.concat(exports.aggregateOrderItems()['agg'])
+    Order.aggregate(
+        agg, (err, results) => exports.parseAggregation(err, results, res)
     )
 }
