@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { reduxForm } from 'redux-form';
 import MenuConfig from '../../components/MenuConfig';
 import InventoryConfig from '../../components/InventoryConfig';
 import {Grid, Card, List, ListItem, ListSubheader, IconButton} from '@material-ui/core/';
@@ -9,19 +10,24 @@ import {LocalCafe, LocalShipping} from '@material-ui/icons/';
 
 class KervConfig extends Component {
     state ={
-        displayMenu: false, 
+        displayMenu: true, 
         displayInventory: false,
         drinkEditMode: false,
         milkEditMode: false,
-        newDrinkMode: false
+        newDrinkMode: false,
+        beanEditMode: false,
+        milkInvEditMode: false, 
+        newInvMode: false,
+        originalData: null
     };
 
     componentDidMount(){
         if(!this.props.kerv.barista){
             this.props.history.push('/login')
           }
-      }
-
+        this.getInitialFormData()
+    }
+   
     handleDisplayInventory = () => {
         this.setState(state =>({displayInventory: true, displayMenu: false}));
     }
@@ -36,15 +42,64 @@ class KervConfig extends Component {
             this.setState(state => ({milkEditMode: !state.milkEditMode}))
         : type === 'newDrink'?
             this.setState({newDrinkMode: true})
-        : this.setState({milkEditMode: false, drinkEditMode: false})
+        : type === 'bean'?
+            this.setState({beanEditMode: true})
+        : type === 'milkInv'?
+            this.setState({milkInvEditMode: true})
+        : type === 'newInvItem'?
+            this.setState({newInvMode: true})
+        : this.setState({milkEditMode: false, drinkEditMode: false, newDrinkMode: false, 
+                        newInvMode: false, beanEditMode: false, milkInvEditMode: false})
     }
+    getInitialFormData = () => {
+        const { kerv } = this.props
+        let data = {
+            bean: [],
+            drink: [],
+            milk: [],
+        }
 
-    handleSubmit = (formValues, original) => {
+        // type === 'drink'?
+        //                 data[type].push({'name': key, 'price': kerv[type][key].price})
+        //             : type === 'bean'?
+        //                 data[type].push({'name': key, 'type': kerv[type][key].type, 'amount': kerv[type][key].amount})
+        //             : type === 'milk' ? () => {
+        //                 let price = 0
+        //                 key === 'whole' ?
+        //                     price = 0 : price=kerv[type][key].price
+        //                 data[type].push({'name': key, 'price': price})
+        //                 data.milkInv.push({'name': key, 'type': kerv[type][key].type, 'amount': kerv[type][key].amount})}
+        //             : console.log('Invalid type...')
+        Object.keys(kerv).map(type => {
+            type !== 'barista'?
+                Object.keys(kerv[type]).map(key => {
+                    type === 'drink'?
+                        data[type].push({'name': key, 'price': kerv[type][key].price})
+                    : type === 'bean'? 
+                        data[type].push({'name': key, 'type': kerv[type][key].type, 'amount': kerv[type][key].amount}) 
+                    : type === 'milk' && key === 'whole'?
+                        data[type].push({'name': key, 'price': 0, 'type': kerv[type][key].type, 'amount': kerv[type][key].amount})
+                    : type === 'milk'?    
+                        data[type].push({'name': key, 'price': kerv[type][key].price,'type': kerv[type][key].type, 'amount': kerv[type][key].amount})
+                    : console.log('notinot')
+                    return null;
+            })
+            : console.log("Cant iterate over barista...")
+            return null;
+        })
+        this.setState({originalData: data})
+        this.props.onLoadFormData(data);
+    }
+    onSubmit = (formValues) => {
+        let original = this.state.originalData
+        // replace original with call to get the initial values
         this.setState({drinkEditMode: false, milkEditMode: false, newDrinkMode: false});
         let diff = updatedDiff(original, formValues)
         let additional = addedDiff(original, formValues);
         let payload = {}
-        payload['newDrinks'] = additional;
+        Object.keys(additional).length !== 0?
+            payload['newDrinks'] = additional
+        : console.log('no new drinks')
 
         Object.keys(diff).map(type => {
             payload[type] = {}
@@ -63,44 +118,40 @@ class KervConfig extends Component {
 
     render() {
         return (  
-                <Grid container spacing={24}>
-                    <Grid item xs={2}>
-                        <Card>
-                            <List subheader={<ListSubheader component="div">Configurations</ListSubheader>}>
-                                <ListItem button onClick={this.handleDisplayMenu}>
-                                    <IconButton><LocalCafe /></IconButton>
-                                </ListItem>
-                                <ListItem button onClick={this.handleDisplayInventory}>
-                                    <IconButton><LocalShipping /></IconButton>
-                                </ListItem>
-                            </List>
-                        </Card>
-                        {/* insert list options */}
-                    </Grid>
-                    <Grid item xs>
-                        <Card>
-                        {/* conditional rendering of either menu or inventory config component */}
-                            {this.state.displayMenu&&
-                            <MenuConfig onSubmit={this.handleSubmit} onEditMode={this.handleEditMode}
-                            drinkEditMode={this.state.drinkEditMode} milkEditMode={this.state.milkEditMode} newDrinkMode={this.state.newDrinkMode}/>
-                            }
-                            {this.state.displayInventory&&<InventoryConfig kerv={this.props.kerv} />}
-                        </Card>
-                    </Grid>
-                </Grid>
+            <Card>
+                <IconButton onClick={this.handleDisplayMenu}><LocalCafe /></IconButton>
+                <IconButton onClick={this.handleDisplayInventory}><LocalShipping /></IconButton>                
+                <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
+                    {this.state.displayMenu&&
+                        <MenuConfig kerv={this.props.kerv} onEditMode={this.handleEditMode}
+                                    drinkEditMode={this.state.drinkEditMode} milkEditMode={this.state.milkEditMode} newDrinkMode={this.state.newDrinkMode}/>
+                    }
+                    {this.state.displayInventory&&
+                        <InventoryConfig kerv={this.props.kerv} onEditMode={this.handleEditMode}
+                                            beanEditMode={this.state.beanEditMode} milkInvEditMode={this.state.milkInvEditMode} newInvMode={this.state.newInvMode}/>}
+                </form>
+            </Card>
         );
     }
 }
 
+KervConfig = reduxForm({
+    form: 'kervConfig'
+})(KervConfig)
+
 const mapStateToProps = state => {
     return {
-      kerv: state.kerv
+      kerv: state.kerv,
+      initialValues: state.config.data
     };
   };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onUpdateMenu: (payload) => dispatch(updateMenu(payload))
+        onUpdateMenu: (payload) => dispatch(updateMenu(payload)),
+        onLoadFormData: (data) => {
+            dispatch({type: 'LOAD', data: data})
+        }
     };
 };
 
