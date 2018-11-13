@@ -56,6 +56,7 @@ let getInitialFormData = (kerv) => {
         drink: [],
         milk: []
     }
+    console.log('this is kerv in getInitialFormData: ', kerv);
 
     Object.keys(kerv).map(type => {
         type !== 'bean' && type!== 'barista'?
@@ -75,7 +76,6 @@ let MenuConfig = (props) => {
     const { handleSubmit} = props;
     const submitForm = (formValues) => {
         props.onSubmit(formValues, getInitialFormData(props.kerv));
-        props.reset();
     }
     
     return (
