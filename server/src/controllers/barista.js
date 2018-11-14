@@ -55,7 +55,6 @@ exports.getSalesDates = (req, res) => {
 }
 
 exports.login = (req, res) => {
-    console.log("inside barista controller with request", req);
     Barista.findOne({name: req.body.user, password: req.body.password})
     .then(user => {
         if(user)
@@ -69,22 +68,39 @@ exports.login = (req, res) => {
     })
 };
 
-exports.addUser= () =>{
-    let baristaKorra = new Barista({name: 'korra', password: 'cwunchies'})
-    baristaKorra.save()
-    .then(korra => {
-        console.log('saved korra', korra)
-    })
-    .catch(err => {
-        console.log('couldnt save korra', err)
-    })
+exports.addUser= (req, res) =>{
 
-    let baristaSamuel = new Barista({name: 'samuel', password: 'catnip'})
-    baristaSamuel.save()
-    .then(sam =>{
-        console.log('saved sam', sam)
+    console.log(req.body.user);
+    let newUser = new Barista(req.body.user)
+    newUser.save()
+    .then(user => {
+        console.log('new user added: ', user)
+        exports.getAll(req, res);
+
     })
     .catch(err => {
-        console.log('couldnt save sam: ', err)
+        console.log('error adding user', err)
+    })
+}
+
+exports.removeUser = (req, res) => {
+    Barista.deleteOne({number: req.body.user.number})
+    .then(() => {
+        exports.getAll(req, res)
+    })
+    .catch(err => {
+        console.log('err: ', err)
+        exports.getAll(req, res)
+    })
+}
+
+exports.getAll = (req, res) =>{
+    Barista.find({}, 'name number')
+    .then(users =>{
+        let response = {users: []}
+        users.map(user => {
+            response.users.push({'name': user.name, 'number': user.number})
+        })
+        res.send(response)
     })
 }

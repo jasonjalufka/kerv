@@ -12,4 +12,7 @@ module.exports = app => {
     app.route('/api/login/').post(Barista.login);
     app.route('/api/config').get(Menu.get);
     app.route('/api/menu').post(Menu.update);
+    app.route('/api/user').get(Barista.getAll);
+    app.route('/api/user').post(Barista.addUser);
+    app.route('/api/user').delete(Barista.removeUser);
 };
