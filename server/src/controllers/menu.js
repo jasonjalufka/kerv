@@ -3,12 +3,12 @@ const Inventory = require('./inventory');
 
 exports.get = (req, res) => {
 	let kerv = {}
-	Drink.get().then(drink =>{
+	Drink.get().then(drink => {
 		kerv['drink'] = drink.drink;
-		Inventory.get().then(inventory =>{
+		Inventory.get().then(inventory => {
 			kerv['milk'] = inventory.milk;
 			kerv['bean'] = inventory.bean;
-			res.send({'kerv': kerv, 'user': req.body.user});
+			res.send({ 'kerv': kerv, 'user': req.body.user, 'token': req.body.token });
 		});
 	});
 };
@@ -17,20 +17,20 @@ exports.update = (req, res) => {
 	let promises = []
 	Object.keys(req.body.payload).map(type => {
 		Object.keys(req.body.payload[type]).map(item => {
-			type === 'drink' ? 
+			type === 'drink' ?
 				promises.push(Drink.findAndUpdate(item, req.body.payload[type][item]))
-			: type === 'milk' ?
-				promises.push(Inventory.findAndUpdate(item, req.body.payload[type][item]))
-			: console.log('type: ', type, 'data: ', req.body.payload[type])
+				: type === 'milk' ?
+					promises.push(Inventory.findAndUpdate(item, req.body.payload[type][item]))
+					: console.log('type: ', type, 'data: ', req.body.payload[type])
 		})
 	})
 
 	Promise.all(promises)
-	.then(data => {
-		exports.get(req, res);
-	})
-	.catch(err => {
-		console.log('error somewhere....', err)
-	})
-	
+		.then(data => {
+			exports.get(req, res);
+		})
+		.catch(err => {
+			console.log('error somewhere....', err)
+		})
+
 }

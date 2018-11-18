@@ -22,6 +22,7 @@ const reducer = (state = initialState, action) => {
                 return null;
             })
             newState.barista = action.payload.user;
+            newState.token = action.payload.token;
             return newState;
         case actionTypes.ADD_ORDER_ITEM:
             let newStateInv = { ...state };
@@ -34,7 +35,9 @@ const reducer = (state = initialState, action) => {
             return state;
         case actionTypes.GET_LOGIN_FAILURE:
             console.log('error, wrong user name or password')
-            return {ERROR: 'WRONG USERNAME OR PASSWORD'}
+            return { ERROR: 'WRONG USERNAME OR PASSWORD' }
+        case 'REFRESH_TOKEN':
+            return { ...state, token: action.token }
         default:
             return state;
     }

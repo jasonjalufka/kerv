@@ -5,6 +5,9 @@ const reducer = (state = {}, action) => {
         case actionTypes.LOAD:
             let newState = {...state, data: action.data}
             return newState;
+        case actionTypes.GET_USERS_SUCCESS:
+            let userState = {...state, users: action.payload.users}
+            return userState;
         default:
             return state;
     }

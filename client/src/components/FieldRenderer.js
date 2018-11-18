@@ -74,13 +74,16 @@ export const renderOriginalFields = ({fields, title, type, og}) => (
     </List>
 );
 
-const renderTextField = ({
+export const renderTextField = ({
     input,
     label,
-    disabled
+    disabled,
+    required
 }) => (
     <TextField
         value={input.value}
+        variant={input.variant}
+        required={required}
         onChange={input.onChange}
         label={label}
         disabled={disabled}
