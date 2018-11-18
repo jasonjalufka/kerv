@@ -9,6 +9,7 @@ module.exports = app => {
     app.route('/api/sales/:barista/dates').get(Barista.getSalesDates);
     app.route('/api/sales/dates').get(Order.getSalesDates);
     app.route('/api/sales/by/:type').get(OrderItem.getSalesByType);
+    app.route('/api/account/create').post(Barista.create);
     app.route('/api/login/').post(Barista.login);
     app.route('/api/config').get(Menu.get);
     app.route('/api/menu').post(Menu.update);
