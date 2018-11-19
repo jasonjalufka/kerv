@@ -1,16 +1,23 @@
 const Drink = require('./drink');
 const Inventory = require('./inventory');
-
+const UserSession = require('./userSession');
 exports.get = (req, res) => {
-	let kerv = {}
-	Drink.get().then(drink => {
-		kerv['drink'] = drink.drink;
-		Inventory.get().then(inventory => {
-			kerv['milk'] = inventory.milk;
-			kerv['bean'] = inventory.bean;
-			res.send({ 'kerv': kerv, 'user': req.body.user, 'token': req.body.token });
-		});
-	});
+	// call verify method from  usersession.ctrler
+	console.log('inside menu get: ', req.body)
+	UserSession.verify(req, res)
+		.then(res => {
+			console.log('RESPONSE: ', res)
+			let kerv = {}
+			Drink.get().then(drink => {
+				kerv['drink'] = drink.drink;
+				Inventory.get().then(inventory => {
+					kerv['milk'] = inventory.milk;
+					kerv['bean'] = inventory.bean;
+					res.send({ 'kerv': kerv, 'user': req.body.user, 'token': req.body.token });
+				});
+			});
+		})
+
 };
 exports.update = (req, res) => {
 	console.log('inside menu controller with request: ', req.body.payload);

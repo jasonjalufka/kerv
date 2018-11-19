@@ -23,13 +23,13 @@ class Sales extends Component {
     }
 
     componentDidMount() {
-        (!this.props.kerv.barista ? this.props.history.push('/login') : this.fetchSalesByMonth());
+        (!this.props.kerv.token ? this.props.history.push('/login') : this.fetchSalesByMonth());
     }
 
     handleSelectMonth(month) {
         this.setState({ monthSelected: month });
     }
-    
+
     // Fetch sales data for all months
     fetchSalesByMonth = () => {
         this.setState({
@@ -38,18 +38,19 @@ class Sales extends Component {
         })
         fetch('/api/sales/dates')
             .then(res => res.json())
-            .then(data => { console.log('this is data from ', data)
+            .then(data => {
+                console.log('this is data from ', data)
                 this.updateTotalRevenue(data);
                 this.updateBarChartData(data);
                 this.updatePieChartData(data);
             })
     }
 
-    updateBaristaTipData=(data) =>{
+    updateBaristaTipData = (data) => {
         let baristaTipArr = []
         Object.keys(data).forEach(monthKey => {
             console.log('deeez tips', data[monthKey].tips)
-            baristaTipArr.push({"month": monthKey, "tips": data[monthKey].tips})
+            baristaTipArr.push({ "month": monthKey, "tips": data[monthKey].tips })
         })
 
         this.setState({
@@ -91,12 +92,13 @@ class Sales extends Component {
         })
         fetch(`/api/sales/${this.props.kerv.barista}/dates`)
             .then(res => res.json())
-            .then(data => { console.log('this is data from ', data)
+            .then(data => {
+                console.log('this is data from ', data)
                 this.updateTotalRevenue(data);
                 this.updateBarChartData(data);
                 this.updatePieChartData(data);
                 this.updateBaristaTipData(data);
-                this.setState({baristaView: true})
+                this.setState({ baristaView: true })
             })
 
     }
@@ -155,7 +157,7 @@ class Sales extends Component {
                         </Grid>
                     </Grid>
                 </div> */}
-                <Button onClick={()=>this.getBaristaStats()}>View Personal Sales</Button>
+                <Button onClick={() => this.getBaristaStats()}>View Personal Sales</Button>
                 {this.state.isLoading === true ?
                     <Grid container
                         direction="row"
@@ -182,13 +184,13 @@ class Sales extends Component {
                         <Grid item xs={4} alignItems="stretch">
                             <PieChart pieChartData={this.state.pieChartData} />
                         </Grid>
-                        {this.state.baristaView&&
-                        <Grid item xs={4} alignItems="stretch">
-                            {this.state.baristaTipData.map(index =><div>Month:{index.month}: ${index.tips}</div>)}
-                        </Grid>
+                        {this.state.baristaView &&
+                            <Grid item xs={4} alignItems="stretch">
+                                {this.state.baristaTipData.map(index => <div>Month:{index.month}: ${index.tips}</div>)}
+                            </Grid>
                         }
                     </Grid>
-                    
+
                 }
             </Card >
         )

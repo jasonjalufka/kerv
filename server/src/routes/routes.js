@@ -2,7 +2,7 @@ const Order = require('../controllers/order');
 const OrderItem = require('../controllers/orderItem');
 const Barista = require('../controllers/barista');
 const Menu = require('../controllers/menu');
-
+const UserSession = require('../controllers/userSession');
 module.exports = app => {
     app.route('/api/sales').post(Order.post);
     app.route('/api/sales').get(OrderItem.getTotal);
@@ -16,4 +16,5 @@ module.exports = app => {
     app.route('/api/user').get(Barista.getAll);
     app.route('/api/user').post(Barista.addUser);
     app.route('/api/user').delete(Barista.removeUser);
+    app.route('/').post(Menu.get)
 };

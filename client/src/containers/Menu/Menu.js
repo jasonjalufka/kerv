@@ -11,7 +11,7 @@ class Menu extends Component {
   }
 
   componentDidMount(){
-    if(!this.props.kerv.barista){
+    if(!this.props.kerv.token){
       this.props.history.push('/login')
     }
   }

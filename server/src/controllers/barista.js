@@ -57,7 +57,6 @@ exports.getSalesDates = (req, res) => {
 }
 
 exports.login = (req, res) => {
-    console.log("inside barista controller with request", req.body);
     Barista.findOne({ name: req.body.user })
         .then(user => {
 

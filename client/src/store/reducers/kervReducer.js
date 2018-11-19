@@ -9,6 +9,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case 'VALID_TOKEN':
         case actionTypes.UPDATE_MENU_SUCCESS:
         case actionTypes.GET_LOGIN_SUCCESS:
             let newState = { ...state };

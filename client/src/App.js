@@ -13,13 +13,25 @@ class App extends Component {
   componentDidMount() {
     const obj = storage.getFromStorage('the_main_app');
     if (obj && obj.token) {
+      console.log('finna send this', obj)
       //verify later from server... 
-      this.props.onRefreshToken(obj)
+      fetch('/', {
+        method: 'POST',
+        body: obj
+      })
+        .then(res => {
+          console.log(res)
+          this.props.onValidToken(res)
+
+        })
     }
+    console.log('token?: ', this.props.kerv.token)
+
   }
-  componentDidUpdate() {
+  componentDidUpdate(nextProps) {
     console.log('I got called yo', this.props.kerv.token)
-    storage.setInStorage('the_main_app', { token: this.props.kerv.token })
+    if (nextProps.kerv.token != this.props.kerv.token)
+      storage.setInStorage('the_main_app', { token: this.props.kerv.token })
   }
 
   handleSubmit = (user) => {
@@ -33,8 +45,8 @@ class App extends Component {
         {/* <Divider /> */}
         <Router>
           <div>
-            <NavBar barista={this.props.kerv.barista} />
-            <Route path="/login" render={(props) => <LoginForm {...props} barista={this.props.kerv.barista} onSubmit={this.handleSubmit} />} />
+            <NavBar token={this.props.kerv.token} />
+            <Route path="/login" render={(props) => <LoginForm {...props} token={this.props.kerv.token} onSubmit={this.handleSubmit} />} />
           </div>
         </Router>
       </div>
@@ -51,7 +63,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onAttemptLogin: (user) => dispatch(getLogin(user)),
-    onRefreshToken: (token) => dispatch({ type: 'REFRESH_TOKEN', token: token })
+    onValidToken: (payload) => dispatch({ type: 'VALID_TOKEN', payload: payload }),
   };
 };
 
