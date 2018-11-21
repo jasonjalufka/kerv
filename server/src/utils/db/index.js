@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-const connection = mongoose.connect("mongodb://localhost:27017/kervTest");
+const connection = mongoose.connect("mongodb://localhost:27017/kervTest", {useNewUrlParser: true});
 const Populate = require('../populateDB');
 connection
     .then(db => {

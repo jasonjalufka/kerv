@@ -3,10 +3,8 @@ const Inventory = require('./inventory');
 const UserSession = require('./userSession');
 exports.get = (req, res) => {
 	// call verify method from  usersession.ctrler
-	console.log('inside menu get: ', req.body)
 	UserSession.verify(req, res)
-		.then(res => {
-			console.log('RESPONSE: ', res)
+		.then(resp => {
 			let kerv = {}
 			Drink.get().then(drink => {
 				kerv['drink'] = drink.drink;

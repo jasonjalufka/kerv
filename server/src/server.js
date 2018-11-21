@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 const config = require('./config');
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // loop through all routes and dynamically require them – passing api

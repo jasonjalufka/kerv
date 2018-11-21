@@ -59,13 +59,13 @@ exports.getSalesDates = (req, res) => {
 exports.login = (req, res) => {
     Barista.findOne({ name: req.body.user })
         .then(user => {
-
             if (user.validPassword(req.body.password)) {
                 session = new UserSession({ userId: user._id, isDeleted: false })
                 session.save()
                     .then(userSession => {
                         req.body['token'] = userSession._id
-                        Menu.get(req, res)
+                        Menu.get(req,res)
+                        
                     })
                     .catch(err => {
                         console.log('error saving the session...', err)

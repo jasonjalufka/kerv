@@ -13,17 +13,15 @@ class App extends Component {
   componentDidMount() {
     const obj = storage.getFromStorage('the_main_app');
     if (obj && obj.token) {
-      console.log('finna send this', obj)
-      //verify later from server... 
       fetch('/', {
         method: 'POST',
-        body: obj
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(obj)
       })
-        .then(res => {
-          console.log(res)
-          this.props.onValidToken(res)
-
-        })
+      .then(response => response.json())
+      .then(data => {
+        this.props.onValidToken(data)
+      })
     }
     console.log('token?: ', this.props.kerv.token)
 
