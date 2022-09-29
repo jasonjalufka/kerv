@@ -15,7 +15,7 @@
     "redux": "^4.0.1",
     "redux-api-middleware": "^2.3.0",
     "redux-form": "^7.4.2",
-    "victory": "^30.6.0"
+    "victory": "^36.6.8"
   },
   "scripts": {
     "start": "react-scripts start",
